@@ -121,6 +121,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/cardLocalLibrary"
                         android:layout_width="0dp"
                         android:layout_height="82dp"
                         android:layout_weight="1"
@@ -161,6 +162,7 @@
                     android:textStyle="bold"/>
 
                 <LinearLayout
+                    android:id="@+id/cardQuickPick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -489,6 +491,7 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/txtLibraryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="YOUR LIBRARY"
@@ -497,6 +500,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/txtLibrarySubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Songs on your device"

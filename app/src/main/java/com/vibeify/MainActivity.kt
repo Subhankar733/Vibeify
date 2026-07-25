@@ -76,6 +76,11 @@ class MainActivity : AppCompatActivity() {
         val settingsScreen = findViewById<View>(R.id.settingsScreen)
 
         val cardLikedSongs = findViewById<View>(R.id.cardLikedSongs)
+        val cardLocalLibrary = findViewById<View>(R.id.cardLocalLibrary)
+        val cardQuickPick = findViewById<View>(R.id.cardQuickPick)
+
+        val txtLibraryTitle = findViewById<TextView>(R.id.txtLibraryTitle)
+        val txtLibrarySubtitle = findViewById<TextView>(R.id.txtLibrarySubtitle)
 
         val navHome = findViewById<Button>(R.id.navHome)
         val navPlayer = findViewById<Button>(R.id.navPlayer)
@@ -91,8 +96,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         cardLikedSongs.setOnClickListener {
+            txtLibraryTitle.text = "LIKED SONGS"
+            txtLibrarySubtitle.text = "Your favourite tracks"
             showFavouriteSongs()
             showScreen(libraryScreen)
+        }
+
+        cardLocalLibrary.setOnClickListener {
+            txtLibraryTitle.text = "YOUR LIBRARY"
+            txtLibrarySubtitle.text = "Songs on your device"
+            showAllSongs()
+            showScreen(libraryScreen)
+        }
+
+        cardQuickPick.setOnClickListener {
+            if (titles.isNotEmpty()) {
+                val index = if (currentSong >= 0 && currentSong < titles.size) {
+                    currentSong
+                } else {
+                    0
+                }
+
+                playSong(index)
+                showScreen(playerScreen)
+            }
         }
 
         navHome.setOnClickListener {
@@ -104,6 +131,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         navLibrary.setOnClickListener {
+            txtLibraryTitle.text = "YOUR LIBRARY"
+            txtLibrarySubtitle.text = "Songs on your device"
             showAllSongs()
             showScreen(libraryScreen)
         }
