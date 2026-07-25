@@ -21,9 +21,9 @@ jobs:
 
     - name: Build Debug APK
       run: |
-        gradle wrapper --gradle-version 8.4
+        gradle wrapper --gradle-version 8.0.2
         chmod +x gradlew
-        ./gradlew assembleDebug --stacktrace --no-daemon
+        ./gradlew assembleDebug --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
