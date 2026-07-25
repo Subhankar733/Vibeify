@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPrevious: Button
     private lateinit var btnNext: Button
     private lateinit var seekBar: SeekBar
+    private lateinit var txtCurrentTime: TextView
+    private lateinit var txtTotalTime: TextView
     private val handler = Handler(Looper.getMainLooper())
 
     private val titles = mutableListOf<String>()
@@ -47,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         btnPrevious = findViewById(R.id.btnPrevious)
         btnNext = findViewById(R.id.btnNext)
         seekBar = findViewById(R.id.seekBar)
+        txtCurrentTime = findViewById(R.id.txtCurrentTime)
+        txtTotalTime = findViewById(R.id.txtTotalTime)
 
         val homeScreen = findViewById<View>(R.id.homeScreen)
         val playerScreen = findViewById<View>(R.id.playerScreen)
@@ -237,6 +241,11 @@ class MainActivity : AppCompatActivity() {
         btnPlay.text = "❚❚"
 
         seekBar.max = mediaPlayer?.duration ?: 0
+        seekBar.progress = 0
+        txtCurrentTime.text = formatTime(0L)
+        txtTotalTime.text = formatTime(
+            (mediaPlayer?.duration ?: durations.getOrElse(position) { 0L }.toInt()).toLong()
+        )
         updateSeekBar()
 
         mediaPlayer?.setOnCompletionListener {
@@ -263,6 +272,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun formatTime(milliseconds: Long): String {
+        val totalSeconds = milliseconds / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%d:%02d", minutes, seconds)
+    }
+
     private fun updateSeekBar() {
         handler.removeCallbacksAndMessages(null)
 
@@ -271,6 +287,7 @@ class MainActivity : AppCompatActivity() {
                 mediaPlayer?.let {
                     if (it.isPlaying) {
                         seekBar.progress = it.currentPosition
+                        txtCurrentTime.text = formatTime(it.currentPosition.toLong())
                     }
                 }
                 handler.postDelayed(this, 500)
