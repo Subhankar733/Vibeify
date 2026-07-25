@@ -4,6 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.media.MediaPlayer
+import android.media.MediaMetadataRetriever
+import android.graphics.BitmapFactory
+import android.widget.ImageView
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPlay: Button
     private lateinit var txtNowPlaying: TextView
     private lateinit var txtArtist: TextView
+    private lateinit var imgAlbumArt: ImageView
     private lateinit var songList: ListView
     private lateinit var btnPrevious: Button
     private lateinit var btnNext: Button
@@ -45,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         btnPlay = findViewById(R.id.btnPlay)
         txtNowPlaying = findViewById(R.id.txtNowPlaying)
         txtArtist = findViewById(R.id.txtArtist)
+        imgAlbumArt = findViewById(R.id.imgAlbumArt)
         songList = findViewById(R.id.songList)
         btnPrevious = findViewById(R.id.btnPrevious)
         btnNext = findViewById(R.id.btnNext)
@@ -228,6 +233,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         txtNowPlaying.text = titles[position]
+        loadAlbumArt(paths[position])
 
         val artist = artists.getOrElse(position) { "Unknown Artist" }
         val album = albums.getOrElse(position) { "Unknown Album" }
@@ -271,6 +277,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun loadAlbumArt(path: String) {
+        val retriever = MediaMetadataRetriever()
+
+        try {
+            retriever.setDataSource(path)
+
+            val art = retriever.embeddedPicture
+
+            if (art != null) {
+                val bitmap = BitmapFactory.decodeByteArray(
+                    art,
+                    0,
+                    art.size
+                )
+
+                if (bitmap != null) {
+                    imgAlbumArt.setImageBitmap(bitmap)
+                    imgAlbumArt.scaleType = ImageView.ScaleType.CENTER_CROP
+                    return
+                }
+            }
+
+            showDefaultAlbumArt()
+
+        } catch (e: Exception) {
+            showDefaultAlbumArt()
+        } finally {
+            try {
+                retriever.release()
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    private fun showDefaultAlbumArt() {
+        imgAlbumArt.setImageDrawable(null)
+        imgAlbumArt.setBackgroundResource(R.drawable.album_art)
+        imgAlbumArt.scaleType = ImageView.ScaleType.CENTER
+    }
 
     private fun formatTime(milliseconds: Long): String {
         val totalSeconds = milliseconds / 1000

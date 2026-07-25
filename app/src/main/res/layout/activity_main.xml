@@ -321,14 +321,27 @@
                     android:background="@drawable/player_card"
                     android:padding="24dp">
 
-                    <TextView
+                    <FrameLayout
                         android:layout_width="240dp"
                         android:layout_height="240dp"
-                        android:gravity="center"
-                        android:text="♫"
-                        android:textSize="90sp"
-                        android:textColor="#FFFFFF"
-                        android:background="@drawable/album_art"/>
+                        android:background="@drawable/album_art">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="♫"
+                            android:textSize="90sp"
+                            android:textColor="#FFFFFF"/>
+
+                        <ImageView
+                            android:id="@+id/imgAlbumArt"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="Album artwork"/>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/txtNowPlaying"
