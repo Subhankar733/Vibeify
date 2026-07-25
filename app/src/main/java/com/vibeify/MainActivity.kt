@@ -6,10 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FastForward
-import androidx.compose.material.icons.filled.FastRewind
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -132,26 +128,26 @@ fun MusicPlayerScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = {}) {
-                    Icon(Icons.Default.FastRewind, contentDescription = "Rewind", tint = TextWhite, modifier = Modifier.size(36.dp))
-                }
-
-                FloatingActionButton(
-                    onClick = { isPlaying = !isPlaying },
-                    containerColor = AccentNeon,
-                    contentColor = Color.White,
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.size(68.dp)
+                Button(
+                    onClick = { },
+                    colors = ButtonDefaults.buttonColors(containerColor = CardSurface)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Play/Pause",
-                        modifier = Modifier.size(36.dp)
-                    )
+                    Text("⏮", fontSize = 20.sp, color = TextWhite)
                 }
 
-                IconButton(onClick = {}) {
-                    Icon(Icons.Default.FastForward, contentDescription = "Forward", tint = TextWhite, modifier = Modifier.size(36.dp))
+                Button(
+                    onClick = { isPlaying = !isPlaying },
+                    colors = ButtonDefaults.buttonColors(containerColor = AccentNeon),
+                    modifier = Modifier.height(56.dp)
+                ) {
+                    Text(if (isPlaying) "⏸" else "▶", fontSize = 24.sp, color = TextWhite)
+                }
+
+                Button(
+                    onClick = { },
+                    colors = ButtonDefaults.buttonColors(containerColor = CardSurface)
+                ) {
+                    Text("⏭", fontSize = 20.sp, color = TextWhite)
                 }
             }
         }
