@@ -33,6 +33,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var seekBar: SeekBar
     private lateinit var txtCurrentTime: TextView
     private lateinit var txtTotalTime: TextView
+    private lateinit var btnShuffle: Button
+    private lateinit var btnFavourite: Button
+    private lateinit var btnRepeat: Button
+
+    private var shuffleEnabled = false
+    private var repeatEnabled = false
+
+    private val favourites by lazy {
+        getSharedPreferences("vibeify_favourites", MODE_PRIVATE)
+    }
     private val handler = Handler(Looper.getMainLooper())
 
     private val titles = mutableListOf<String>()
@@ -56,6 +66,9 @@ class MainActivity : AppCompatActivity() {
         seekBar = findViewById(R.id.seekBar)
         txtCurrentTime = findViewById(R.id.txtCurrentTime)
         txtTotalTime = findViewById(R.id.txtTotalTime)
+        btnShuffle = findViewById(R.id.btnShuffle)
+        btnFavourite = findViewById(R.id.btnFavourite)
+        btnRepeat = findViewById(R.id.btnRepeat)
 
         val homeScreen = findViewById<View>(R.id.homeScreen)
         val playerScreen = findViewById<View>(R.id.playerScreen)
@@ -112,17 +125,42 @@ class MainActivity : AppCompatActivity() {
 
         btnNext.setOnClickListener {
             if (titles.isNotEmpty()) {
-                val next = if (currentSong + 1 < titles.size) currentSong + 1 else 0
-                playSong(next)
+                playSong(getNextSongIndex())
             }
         }
 
         btnPrevious.setOnClickListener {
             if (titles.isNotEmpty()) {
-                val previous = if (currentSong - 1 >= 0) currentSong - 1 else titles.size - 1
+                val previous = getPreviousSongIndex()
                 playSong(previous)
             }
         }
+
+        btnShuffle.setOnClickListener {
+            shuffleEnabled = !shuffleEnabled
+            updateModeButtons()
+        }
+
+        btnRepeat.setOnClickListener {
+            repeatEnabled = !repeatEnabled
+            updateModeButtons()
+        }
+
+        btnFavourite.setOnClickListener {
+            if (currentSong >= 0 && currentSong < paths.size) {
+                val path = paths[currentSong]
+                val isFavourite = favourites.getBoolean(path, false)
+
+                favourites.edit()
+                    .putBoolean(path, !isFavourite)
+                    .apply()
+
+                updateFavouriteButton()
+            }
+        }
+
+        updateModeButtons()
+        updateFavouriteButton()
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -234,6 +272,7 @@ class MainActivity : AppCompatActivity() {
 
         txtNowPlaying.text = titles[position]
         loadAlbumArt(paths[position])
+        updateFavouriteButton()
 
         val artist = artists.getOrElse(position) { "Unknown Artist" }
         val album = albums.getOrElse(position) { "Unknown Album" }
@@ -256,8 +295,11 @@ class MainActivity : AppCompatActivity() {
 
         mediaPlayer?.setOnCompletionListener {
             if (titles.isNotEmpty()) {
-                val next = if (currentSong + 1 < titles.size) currentSong + 1 else 0
-                playSong(next)
+                if (repeatEnabled && currentSong >= 0) {
+                    playSong(currentSong)
+                } else {
+                    playSong(getNextSongIndex())
+                }
             }
         }
     }
@@ -277,6 +319,63 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun getNextSongIndex(): Int {
+        if (titles.isEmpty()) return 0
+
+        if (shuffleEnabled && titles.size > 1) {
+            var next: Int
+            do {
+                next = kotlin.random.Random.nextInt(titles.size)
+            } while (next == currentSong)
+
+            return next
+        }
+
+        return if (currentSong + 1 < titles.size) {
+            currentSong + 1
+        } else {
+            0
+        }
+    }
+
+    private fun getPreviousSongIndex(): Int {
+        if (titles.isEmpty()) return 0
+
+        if (shuffleEnabled && titles.size > 1) {
+            var previous: Int
+            do {
+                previous = kotlin.random.Random.nextInt(titles.size)
+            } while (previous == currentSong)
+
+            return previous
+        }
+
+        return if (currentSong - 1 >= 0) {
+            currentSong - 1
+        } else {
+            titles.size - 1
+        }
+    }
+
+    private fun updateModeButtons() {
+        btnShuffle.text = if (shuffleEnabled) "🔀 ON" else "🔀"
+        btnRepeat.text = if (repeatEnabled) "🔁 ON" else "🔁"
+    }
+
+    private fun updateFavouriteButton() {
+        if (currentSong < 0 || currentSong >= paths.size) {
+            btnFavourite.text = "♡"
+            return
+        }
+
+        val isFavourite = favourites.getBoolean(
+            paths[currentSong],
+            false
+        )
+
+        btnFavourite.text = if (isFavourite) "♥" else "♡"
+    }
 
     private fun loadAlbumArt(path: String) {
         val retriever = MediaMetadataRetriever()
