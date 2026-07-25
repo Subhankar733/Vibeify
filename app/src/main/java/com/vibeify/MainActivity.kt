@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.SeekBar
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +22,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPlay: Button
     private lateinit var txtNowPlaying: TextView
     private lateinit var songList: ListView
+    private lateinit var btnPrevious: Button
+    private lateinit var btnNext: Button
+    private lateinit var seekBar: SeekBar
+    private val handler = Handler(Looper.getMainLooper())
 
     private val titles = mutableListOf<String>()
     private val paths = mutableListOf<String>()
@@ -31,6 +38,9 @@ class MainActivity : AppCompatActivity() {
         btnPlay = findViewById(R.id.btnPlay)
         txtNowPlaying = findViewById(R.id.txtNowPlaying)
         songList = findViewById(R.id.songList)
+        btnPrevious = findViewById(R.id.btnPrevious)
+        btnNext = findViewById(R.id.btnNext)
+        seekBar = findViewById(R.id.seekBar)
 
         btnPlay.setOnClickListener {
             val player = mediaPlayer ?: return@setOnClickListener
@@ -47,6 +57,29 @@ class MainActivity : AppCompatActivity() {
         songList.setOnItemClickListener { _, _, position, _ ->
             playSong(position)
         }
+
+        btnNext.setOnClickListener {
+            if (titles.isNotEmpty()) {
+                val next = if (currentSong + 1 < titles.size) currentSong + 1 else 0
+                playSong(next)
+            }
+        }
+
+        btnPrevious.setOnClickListener {
+            if (titles.isNotEmpty()) {
+                val previous = if (currentSong - 1 >= 0) currentSong - 1 else titles.size - 1
+                playSong(previous)
+            }
+        }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) mediaPlayer?.seekTo(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
         requestAudioPermission()
     }
@@ -123,6 +156,16 @@ class MainActivity : AppCompatActivity() {
 
         txtNowPlaying.text = titles[position]
         btnPlay.text = "PAUSE ⏸"
+
+        seekBar.max = mediaPlayer?.duration ?: 0
+        updateSeekBar()
+
+        mediaPlayer?.setOnCompletionListener {
+            if (titles.isNotEmpty()) {
+                val next = if (currentSong + 1 < titles.size) currentSong + 1 else 0
+                playSong(next)
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -140,7 +183,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun updateSeekBar() {
+        handler.removeCallbacksAndMessages(null)
+
+        handler.post(object : Runnable {
+            override fun run() {
+                mediaPlayer?.let {
+                    if (it.isPlaying) {
+                        seekBar.progress = it.currentPosition
+                    }
+                }
+                handler.postDelayed(this, 500)
+            }
+        })
+    }
+
     override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
         mediaPlayer?.release()
         mediaPlayer = null
         super.onDestroy()
