@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.vibeify"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.vibeify"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }
@@ -28,22 +28,22 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.activity:activity-compose:1.7.2")
     
-    // Stable Jetpack Compose Material3
-    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+    // Guaranteed Stable Compose BOM
+    implementation(platform("androidx.compose:compose-bom:2023.05.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     
-    // ExoPlayer
-    implementation("androidx.media3:media3-exoplayer:1.2.1")
+    // Stable Media3 ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:1.0.2")
 }
