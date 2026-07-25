@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var btnPlay: Button
     private lateinit var txtNowPlaying: TextView
+    private lateinit var txtArtist: TextView
     private lateinit var songList: ListView
     private lateinit var btnPrevious: Button
     private lateinit var btnNext: Button
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         btnPlay = findViewById(R.id.btnPlay)
         txtNowPlaying = findViewById(R.id.txtNowPlaying)
+        txtArtist = findViewById(R.id.txtArtist)
         songList = findViewById(R.id.songList)
         btnPrevious = findViewById(R.id.btnPrevious)
         btnNext = findViewById(R.id.btnNext)
@@ -47,10 +49,10 @@ class MainActivity : AppCompatActivity() {
 
             if (player.isPlaying) {
                 player.pause()
-                btnPlay.text = "PLAY ▶"
+                btnPlay.text = "▶"
             } else {
                 player.start()
-                btnPlay.text = "PAUSE ⏸"
+                btnPlay.text = "❚❚"
             }
         }
 
@@ -155,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         txtNowPlaying.text = titles[position]
-        btnPlay.text = "PAUSE ⏸"
+        btnPlay.text = "❚❚"
 
         seekBar.max = mediaPlayer?.duration ?: 0
         updateSeekBar()
