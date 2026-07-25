@@ -48,15 +48,18 @@ class MainActivity : AppCompatActivity() {
         val homeScreen = findViewById<View>(R.id.homeScreen)
         val playerScreen = findViewById<View>(R.id.playerScreen)
         val libraryScreen = findViewById<View>(R.id.libraryScreen)
+        val settingsScreen = findViewById<View>(R.id.settingsScreen)
 
         val navHome = findViewById<Button>(R.id.navHome)
         val navPlayer = findViewById<Button>(R.id.navPlayer)
         val navLibrary = findViewById<Button>(R.id.navLibrary)
+        val navSettings = findViewById<Button>(R.id.navSettings)
 
         fun showScreen(screen: View) {
             homeScreen.visibility = View.GONE
             playerScreen.visibility = View.GONE
             libraryScreen.visibility = View.GONE
+            settingsScreen.visibility = View.GONE
             screen.visibility = View.VISIBLE
         }
 
@@ -70,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
         navLibrary.setOnClickListener {
             showScreen(libraryScreen)
+        }
+
+        navSettings.setOnClickListener {
+            showScreen(settingsScreen)
         }
 
         showScreen(homeScreen)

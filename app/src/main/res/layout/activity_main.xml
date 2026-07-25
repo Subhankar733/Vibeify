@@ -201,6 +201,116 @@
 
         </LinearLayout>
 
+        <!-- SETTINGS -->
+        <ScrollView
+            android:id="@+id/settingsScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="28dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Settings"
+                    android:textColor="#FFFFFF"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="24dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/settings_card"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="◉   Appearance
+      Theme, colors and display"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="18dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#303038" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="♫   Local Library
+      Scan music on your device"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="18dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#303038" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="≋   Audio
+      Playback and audio options"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="18dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/settings_card"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="▤   Storage &amp; Cache
+      Manage local music data"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="18dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#303038" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ⓘ   About Vibeify
+      Version 1.0"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="18dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
     </FrameLayout>
 
     <!-- BOTTOM NAV -->
@@ -239,6 +349,16 @@
             android:text="☷&#10;LIBRARY"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
+            android:backgroundTint="#121216"/>
+
+        <Button
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="⚙&#10;SETTINGS"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
             android:backgroundTint="#121216"/>
 
     </LinearLayout>
