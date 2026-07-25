@@ -75,6 +75,8 @@ class MainActivity : AppCompatActivity() {
         val libraryScreen = findViewById<View>(R.id.libraryScreen)
         val settingsScreen = findViewById<View>(R.id.settingsScreen)
 
+        val cardLikedSongs = findViewById<View>(R.id.cardLikedSongs)
+
         val navHome = findViewById<Button>(R.id.navHome)
         val navPlayer = findViewById<Button>(R.id.navPlayer)
         val navLibrary = findViewById<Button>(R.id.navLibrary)
@@ -88,6 +90,11 @@ class MainActivity : AppCompatActivity() {
             screen.visibility = View.VISIBLE
         }
 
+        cardLikedSongs.setOnClickListener {
+            showFavouriteSongs()
+            showScreen(libraryScreen)
+        }
+
         navHome.setOnClickListener {
             showScreen(homeScreen)
         }
@@ -97,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         navLibrary.setOnClickListener {
+            showAllSongs()
             showScreen(libraryScreen)
         }
 
@@ -355,6 +363,40 @@ class MainActivity : AppCompatActivity() {
             currentSong - 1
         } else {
             titles.size - 1
+        }
+    }
+
+    private fun showAllSongs() {
+        songList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            titles
+        )
+
+        songList.setOnItemClickListener { _, _, position, _ ->
+            playSong(position)
+        }
+    }
+
+    private fun showFavouriteSongs() {
+        val favouriteIndexes = paths.indices.filter { index ->
+            favourites.getBoolean(paths[index], false)
+        }
+
+        val favouriteTitles = favouriteIndexes.map { index ->
+            "♥ ${titles[index]}"
+        }
+
+        songList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            favouriteTitles
+        )
+
+        songList.setOnItemClickListener { _, _, position, _ ->
+            if (position in favouriteIndexes.indices) {
+                playSong(favouriteIndexes[position])
+            }
         }
     }
 
