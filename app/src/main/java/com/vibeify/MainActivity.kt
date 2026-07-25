@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     private val titles = mutableListOf<String>()
     private val paths = mutableListOf<String>()
+    private val artists = mutableListOf<String>()
+    private val albums = mutableListOf<String>()
+    private val durations = mutableListOf<Long>()
     private var currentSong = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -153,10 +156,16 @@ class MainActivity : AppCompatActivity() {
     private fun loadSongs() {
         titles.clear()
         paths.clear()
+        artists.clear()
+        albums.clear()
+        durations.clear()
 
         val projection = arrayOf(
             MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.DATA
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.DURATION
         )
 
         val cursor: Cursor? = contentResolver.query(
@@ -170,10 +179,30 @@ class MainActivity : AppCompatActivity() {
         cursor?.use {
             val titleIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
             val dataIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val artistIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+            val albumIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+            val durationIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
 
             while (it.moveToNext()) {
-                titles.add(it.getString(titleIndex))
+                titles.add(it.getString(titleIndex) ?: "Unknown title")
                 paths.add(it.getString(dataIndex))
+
+                val artist = it.getString(artistIndex)
+                val album = it.getString(albumIndex)
+
+                artists.add(
+                    if (artist.isNullOrBlank() || artist == "<unknown>")
+                        "Unknown Artist"
+                    else artist
+                )
+
+                albums.add(
+                    if (album.isNullOrBlank())
+                        "Unknown Album"
+                    else album
+                )
+
+                durations.add(it.getLong(durationIndex))
             }
         }
 
@@ -195,6 +224,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         txtNowPlaying.text = titles[position]
+
+        val artist = artists.getOrElse(position) { "Unknown Artist" }
+        val album = albums.getOrElse(position) { "Unknown Album" }
+
+        txtArtist.text = if (album == "Unknown Album") {
+            artist
+        } else {
+            "$artist • $album"
+        }
+
         btnPlay.text = "❚❚"
 
         seekBar.max = mediaPlayer?.duration ?: 0
