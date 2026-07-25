@@ -320,9 +320,26 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, MusicService::class.java).apply {
             action = MusicService.ACTION_PLAY
-            putExtra(MusicService.EXTRA_PATH, paths[position])
-            putExtra(MusicService.EXTRA_TITLE, title)
-            putExtra(MusicService.EXTRA_ARTIST, artist)
+
+            putStringArrayListExtra(
+                MusicService.EXTRA_PATHS,
+                ArrayList(paths)
+            )
+
+            putStringArrayListExtra(
+                MusicService.EXTRA_TITLES,
+                ArrayList(titles)
+            )
+
+            putStringArrayListExtra(
+                MusicService.EXTRA_ARTISTS,
+                ArrayList(artists)
+            )
+
+            putExtra(
+                MusicService.EXTRA_INDEX,
+                position
+            )
         }
 
         ContextCompat.startForegroundService(this, intent)
@@ -502,6 +519,41 @@ class MainActivity : AppCompatActivity() {
 
         handler.post(object : Runnable {
             override fun run() {
+                val serviceIndex = MusicService.currentIndex()
+
+                if (serviceIndex in paths.indices &&
+                    serviceIndex != currentSong
+                ) {
+                    currentSong = serviceIndex
+
+                    val title =
+                        titles.getOrElse(serviceIndex) {
+                            MusicService.currentTitle
+                        }
+
+                    val artist =
+                        artists.getOrElse(serviceIndex) {
+                            MusicService.currentArtist
+                        }
+
+                    val album =
+                        albums.getOrElse(serviceIndex) {
+                            "Unknown Album"
+                        }
+
+                    txtNowPlaying.text = title
+
+                    txtArtist.text =
+                        if (album == "Unknown Album") {
+                            artist
+                        } else {
+                            "$artist • $album"
+                        }
+
+                    loadAlbumArt(paths[serviceIndex])
+                    updateFavouriteButton()
+                }
+
                 val duration = MusicService.duration()
                 val position = MusicService.position()
 

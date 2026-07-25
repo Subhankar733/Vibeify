@@ -16,11 +16,17 @@ class MusicService : Service() {
     companion object {
         const val ACTION_PLAY = "com.vibeify.action.PLAY"
         const val ACTION_PAUSE = "com.vibeify.action.PAUSE"
+        const val ACTION_NEXT = "com.vibeify.action.NEXT"
+        const val ACTION_PREVIOUS = "com.vibeify.action.PREVIOUS"
         const val ACTION_STOP = "com.vibeify.action.STOP"
 
         const val EXTRA_PATH = "path"
         const val EXTRA_TITLE = "title"
         const val EXTRA_ARTIST = "artist"
+        const val EXTRA_PATHS = "paths"
+        const val EXTRA_TITLES = "titles"
+        const val EXTRA_ARTISTS = "artists"
+        const val EXTRA_INDEX = "index"
 
         private const val CHANNEL_ID = "vibeify_playback"
         private const val NOTIFICATION_ID = 1001
@@ -36,6 +42,15 @@ class MusicService : Service() {
 
         var currentArtist: String = "Local Music"
             private set
+
+        private val playlistPaths = mutableListOf<String>()
+        private val playlistTitles = mutableListOf<String>()
+        private val playlistArtists = mutableListOf<String>()
+        private var currentIndex = -1
+
+        fun currentIndex(): Int {
+            return currentIndex
+        }
 
         fun isPlaying(): Boolean {
             return try {
@@ -83,19 +98,57 @@ class MusicService : Service() {
         when (intent?.action) {
 
             ACTION_PLAY -> {
-                val path = intent.getStringExtra(EXTRA_PATH)
+                val incomingPaths =
+                    intent.getStringArrayListExtra(EXTRA_PATHS)
+                val incomingTitles =
+                    intent.getStringArrayListExtra(EXTRA_TITLES)
+                val incomingArtists =
+                    intent.getStringArrayListExtra(EXTRA_ARTISTS)
 
-                if (!path.isNullOrBlank() && path != currentPath) {
-                    currentTitle =
-                        intent.getStringExtra(EXTRA_TITLE) ?: "Unknown title"
+                if (!incomingPaths.isNullOrEmpty()) {
+                    playlistPaths.clear()
+                    playlistPaths.addAll(incomingPaths)
 
-                    currentArtist =
-                        intent.getStringExtra(EXTRA_ARTIST) ?: "Unknown Artist"
+                    playlistTitles.clear()
+                    playlistTitles.addAll(
+                        incomingTitles ?: arrayListOf()
+                    )
 
-                    playNewSong(path)
+                    playlistArtists.clear()
+                    playlistArtists.addAll(
+                        incomingArtists ?: arrayListOf()
+                    )
+
+                    currentIndex =
+                        intent.getIntExtra(EXTRA_INDEX, 0)
+                            .coerceIn(0, playlistPaths.lastIndex)
+
+                    playIndex(currentIndex)
                 } else {
-                    resumePlayback()
+                    val path = intent.getStringExtra(EXTRA_PATH)
+
+                    if (!path.isNullOrBlank() && path != currentPath) {
+                        currentTitle =
+                            intent.getStringExtra(EXTRA_TITLE)
+                                ?: "Unknown title"
+
+                        currentArtist =
+                            intent.getStringExtra(EXTRA_ARTIST)
+                                ?: "Unknown Artist"
+
+                        playNewSong(path)
+                    } else {
+                        resumePlayback()
+                    }
                 }
+            }
+
+            ACTION_NEXT -> {
+                playNext()
+            }
+
+            ACTION_PREVIOUS -> {
+                playPrevious()
             }
 
             ACTION_PAUSE -> {
@@ -124,7 +177,7 @@ class MusicService : Service() {
                 start()
 
                 setOnCompletionListener {
-                    updateNotification()
+                    playNext()
                 }
             }
 
@@ -137,6 +190,49 @@ class MusicService : Service() {
             stopPlayback()
             stopSelf()
         }
+    }
+
+    private fun playIndex(index: Int) {
+        if (playlistPaths.isEmpty()) return
+
+        currentIndex =
+            index.coerceIn(0, playlistPaths.lastIndex)
+
+        currentTitle =
+            playlistTitles.getOrElse(currentIndex) {
+                "Unknown title"
+            }
+
+        currentArtist =
+            playlistArtists.getOrElse(currentIndex) {
+                "Unknown Artist"
+            }
+
+        playNewSong(playlistPaths[currentIndex])
+    }
+
+    private fun playNext() {
+        if (playlistPaths.isEmpty()) return
+
+        val next =
+            if (currentIndex + 1 < playlistPaths.size)
+                currentIndex + 1
+            else
+                0
+
+        playIndex(next)
+    }
+
+    private fun playPrevious() {
+        if (playlistPaths.isEmpty()) return
+
+        val previous =
+            if (currentIndex - 1 >= 0)
+                currentIndex - 1
+            else
+                playlistPaths.lastIndex
+
+        playIndex(previous)
     }
 
     private fun resumePlayback() {
@@ -196,6 +292,32 @@ class MusicService : Service() {
                 PendingIntent.FLAG_IMMUTABLE
         )
 
+        val previousIntent =
+            Intent(this, MusicService::class.java).apply {
+                action = ACTION_PREVIOUS
+            }
+
+        val previousPendingIntent = PendingIntent.getService(
+            this,
+            10,
+            previousIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val nextIntent =
+            Intent(this, MusicService::class.java).apply {
+                action = ACTION_NEXT
+            }
+
+        val nextPendingIntent = PendingIntent.getService(
+            this,
+            11,
+            nextIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                PendingIntent.FLAG_IMMUTABLE
+        )
+
         val toggleIntent = Intent(this, MusicService::class.java).apply {
             action =
                 if (isPlaying()) ACTION_PAUSE
@@ -230,12 +352,22 @@ class MusicService : Service() {
             .setOnlyAlertOnce(true)
             .setOngoing(isPlaying())
             .addAction(
+                android.R.drawable.ic_media_previous,
+                "Previous",
+                previousPendingIntent
+            )
+            .addAction(
                 if (isPlaying())
                     android.R.drawable.ic_media_pause
                 else
                     android.R.drawable.ic_media_play,
                 if (isPlaying()) "Pause" else "Play",
                 togglePendingIntent
+            )
+            .addAction(
+                android.R.drawable.ic_media_next,
+                "Next",
+                nextPendingIntent
             )
             .addAction(
                 android.R.drawable.ic_menu_close_clear_cancel,
