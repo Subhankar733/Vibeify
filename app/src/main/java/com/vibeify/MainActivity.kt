@@ -2,8 +2,9 @@ package com.vibeify
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import android.database.Cursor
-import android.media.MediaPlayer
 import android.media.MediaMetadataRetriever
 import android.graphics.BitmapFactory
 import android.widget.ImageView
@@ -22,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private var mediaPlayer: MediaPlayer? = null
     private lateinit var btnPlay: Button
     private lateinit var txtNowPlaying: TextView
     private lateinit var txtArtist: TextView
@@ -144,13 +144,17 @@ class MainActivity : AppCompatActivity() {
         showScreen(homeScreen)
 
         btnPlay.setOnClickListener {
-            val player = mediaPlayer ?: return@setOnClickListener
-
-            if (player.isPlaying) {
-                player.pause()
+            if (MusicService.currentPath == null) {
+                if (titles.isNotEmpty()) {
+                    val index =
+                        if (currentSong in titles.indices) currentSong else 0
+                    playSong(index)
+                }
+            } else if (MusicService.isPlaying()) {
+                sendPlaybackAction(MusicService.ACTION_PAUSE)
                 btnPlay.text = "▶"
             } else {
-                player.start()
+                sendPlaybackAction(MusicService.ACTION_PLAY)
                 btnPlay.text = "❚❚"
             }
         }
@@ -201,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) mediaPlayer?.seekTo(progress)
+                if (fromUser) MusicService.seekTo(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -298,47 +302,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playSong(position: Int) {
-        mediaPlayer?.release()
+        if (position !in paths.indices) return
 
         currentSong = position
-        mediaPlayer = MediaPlayer().apply {
-            setDataSource(paths[position])
-            prepare()
-            start()
-        }
 
-        txtNowPlaying.text = titles[position]
-        loadAlbumArt(paths[position])
-        updateFavouriteButton()
-
+        val title = titles.getOrElse(position) { "Unknown title" }
         val artist = artists.getOrElse(position) { "Unknown Artist" }
         val album = albums.getOrElse(position) { "Unknown Album" }
 
-        txtArtist.text = if (album == "Unknown Album") {
-            artist
-        } else {
-            "$artist • $album"
+        txtNowPlaying.text = title
+        txtArtist.text =
+            if (album == "Unknown Album") artist
+            else "$artist • $album"
+
+        loadAlbumArt(paths[position])
+        updateFavouriteButton()
+
+        val intent = Intent(this, MusicService::class.java).apply {
+            action = MusicService.ACTION_PLAY
+            putExtra(MusicService.EXTRA_PATH, paths[position])
+            putExtra(MusicService.EXTRA_TITLE, title)
+            putExtra(MusicService.EXTRA_ARTIST, artist)
         }
+
+        ContextCompat.startForegroundService(this, intent)
 
         btnPlay.text = "❚❚"
 
-        seekBar.max = mediaPlayer?.duration ?: 0
-        seekBar.progress = 0
-        txtCurrentTime.text = formatTime(0L)
-        txtTotalTime.text = formatTime(
-            (mediaPlayer?.duration ?: durations.getOrElse(position) { 0L }.toInt()).toLong()
-        )
-        updateSeekBar()
+        val knownDuration =
+            durations.getOrElse(position) { 0L }
+                .coerceAtMost(Int.MAX_VALUE.toLong())
+                .toInt()
 
-        mediaPlayer?.setOnCompletionListener {
-            if (titles.isNotEmpty()) {
-                if (repeatEnabled && currentSong >= 0) {
-                    playSong(currentSong)
-                } else {
-                    playSong(getNextSongIndex())
-                }
-            }
-        }
+        seekBar.max = knownDuration
+        seekBar.progress = 0
+
+        txtCurrentTime.text = formatTime(0L)
+        txtTotalTime.text = formatTime(knownDuration.toLong())
+
+        updateSeekBar()
     }
 
     override fun onRequestPermissionsResult(
@@ -500,21 +502,40 @@ class MainActivity : AppCompatActivity() {
 
         handler.post(object : Runnable {
             override fun run() {
-                mediaPlayer?.let {
-                    if (it.isPlaying) {
-                        seekBar.progress = it.currentPosition
-                        txtCurrentTime.text = formatTime(it.currentPosition.toLong())
-                    }
+                val duration = MusicService.duration()
+                val position = MusicService.position()
+
+                if (duration > 0) {
+                    seekBar.max = duration
+                    txtTotalTime.text =
+                        formatTime(duration.toLong())
                 }
+
+                seekBar.progress =
+                    position.coerceAtMost(seekBar.max)
+
+                txtCurrentTime.text =
+                    formatTime(position.toLong())
+
+                btnPlay.text =
+                    if (MusicService.isPlaying()) "❚❚"
+                    else "▶"
+
                 handler.postDelayed(this, 500)
             }
         })
     }
 
+    private fun sendPlaybackAction(actionName: String) {
+        val intent = Intent(this, MusicService::class.java).apply {
+            action = actionName
+        }
+
+        startService(intent)
+    }
+
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        mediaPlayer?.release()
-        mediaPlayer = null
         super.onDestroy()
     }
 }
