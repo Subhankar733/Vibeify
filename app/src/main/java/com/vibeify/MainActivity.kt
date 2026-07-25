@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.SeekBar
+import android.view.View
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +45,35 @@ class MainActivity : AppCompatActivity() {
         btnNext = findViewById(R.id.btnNext)
         seekBar = findViewById(R.id.seekBar)
 
+        val homeScreen = findViewById<View>(R.id.homeScreen)
+        val playerScreen = findViewById<View>(R.id.playerScreen)
+        val libraryScreen = findViewById<View>(R.id.libraryScreen)
+
+        val navHome = findViewById<Button>(R.id.navHome)
+        val navPlayer = findViewById<Button>(R.id.navPlayer)
+        val navLibrary = findViewById<Button>(R.id.navLibrary)
+
+        fun showScreen(screen: View) {
+            homeScreen.visibility = View.GONE
+            playerScreen.visibility = View.GONE
+            libraryScreen.visibility = View.GONE
+            screen.visibility = View.VISIBLE
+        }
+
+        navHome.setOnClickListener {
+            showScreen(homeScreen)
+        }
+
+        navPlayer.setOnClickListener {
+            showScreen(playerScreen)
+        }
+
+        navLibrary.setOnClickListener {
+            showScreen(libraryScreen)
+        }
+
+        showScreen(homeScreen)
+
         btnPlay.setOnClickListener {
             val player = mediaPlayer ?: return@setOnClickListener
 
@@ -58,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         songList.setOnItemClickListener { _, _, position, _ ->
             playSong(position)
+            showScreen(playerScreen)
         }
 
         btnNext.setOnClickListener {
