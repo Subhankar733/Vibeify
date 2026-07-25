@@ -25,9 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnPrevious: Button
     private lateinit var btnNext: Button
     private lateinit var seekBar: SeekBar
-    private lateinit var btnPrevious: Button
-    private lateinit var btnNext: Button
-    private lateinit var seekBar: SeekBar
     private val handler = Handler(Looper.getMainLooper())
 
     private val titles = mutableListOf<String>()
