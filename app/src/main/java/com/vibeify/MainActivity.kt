@@ -1,5 +1,6 @@
 package com.vibeify
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,13 +20,42 @@ import androidx.compose.ui.unit.sp
 import com.vibeify.ui.theme.*
 
 class MainActivity : ComponentActivity() {
+    private var mediaPlayer: MediaPlayer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             VibeifyTheme {
-                MusicPlayerScreen()
+                MusicPlayerScreen(
+                    onPlayPause = { isPlaying ->
+                        if (isPlaying) {
+                            playSampleAudio()
+                        } else {
+                            mediaPlayer?.pause()
+                        }
+                    }
+                )
             }
         }
+    }
+
+    private fun playSampleAudio() {
+        if (mediaPlayer == null) {
+            val sampleUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(sampleUrl)
+                prepareAsync()
+                setOnPreparedListener { start() }
+            }
+        } else {
+            mediaPlayer?.start()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }
 
@@ -42,7 +72,7 @@ fun VibeifyTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun MusicPlayerScreen() {
+fun MusicPlayerScreen(onPlayPause: (Boolean) -> Unit) {
     var isPlaying by remember { mutableStateOf(false) }
     var progress by remember { mutableFloatStateOf(0.3f) }
 
@@ -96,7 +126,7 @@ fun MusicPlayerScreen() {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Chill & Synthwave • Original Track",
+                    text = "Online Stream Test • Vibeify",
                     fontSize = 14.sp,
                     color = TextMuted
                 )
@@ -112,13 +142,6 @@ fun MusicPlayerScreen() {
                         inactiveTrackColor = CardSurface
                     )
                 )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("1:15", fontSize = 12.sp, color = TextMuted)
-                    Text("3:45", fontSize = 12.sp, color = TextMuted)
-                }
             }
 
             Row(
@@ -136,7 +159,10 @@ fun MusicPlayerScreen() {
                 }
 
                 Button(
-                    onClick = { isPlaying = !isPlaying },
+                    onClick = {
+                        isPlaying = !isPlaying
+                        onPlayPause(isPlaying)
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = AccentNeon),
                     modifier = Modifier.height(56.dp)
                 ) {
