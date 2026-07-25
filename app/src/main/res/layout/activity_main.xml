@@ -12,8 +12,7 @@
         android:textSize="32sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp" />
+        android:padding="20dp" />
 
     <TextView
         android:id="@+id/txtNowPlaying"
@@ -24,12 +23,36 @@
         android:gravity="center"
         android:padding="16dp" />
 
-    <Button
-        android:id="@+id/btnPlay"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="PLAY VIBE 🎧" />
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PREV" />
+
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLAY" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEXT" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -37,7 +60,7 @@
         android:text="Songs on your device"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:paddingTop="28dp"
+        android:paddingTop="24dp"
         android:paddingBottom="12dp" />
 
     <ListView
