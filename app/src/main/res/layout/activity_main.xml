@@ -430,12 +430,14 @@
                         <ListView
                             android:id="@+id/upNextList"
                             android:layout_width="match_parent"
-                            android:layout_height="260dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_height="220dp"
+                            android:layout_marginTop="8dp"
                             android:divider="@android:color/transparent"
-                            android:dividerHeight="4dp"
+                            android:dividerHeight="2dp"
                             android:listSelector="@android:color/transparent"
-                            android:scrollbars="none"/>
+                            android:scrollbars="none"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"/>
 
                     </LinearLayout>
 
