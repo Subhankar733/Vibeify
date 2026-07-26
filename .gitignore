@@ -1,0 +1,12 @@
+
+# Local Vibeify backups
+.vibeify-backup/
+.vibeify-backups/
+*.bak
+*.bak_*
+*.backup
+*.v1backup
+*.v2backup
+*.v3backup
+*.v4backup
+*.before_*
