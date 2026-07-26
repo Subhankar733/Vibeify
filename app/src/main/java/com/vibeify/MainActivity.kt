@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnShuffle: ImageButton
     private lateinit var btnFavourite: ImageButton
     private lateinit var btnRepeat: ImageButton
+    private lateinit var upNextList: ListView
+    private lateinit var txtUpNextCount: TextView
 
     private var shuffleEnabled = false
     private var repeatEnabled = false
@@ -79,6 +81,8 @@ class MainActivity : AppCompatActivity() {
         btnShuffle = findViewById(R.id.btnShuffle)
         btnFavourite = findViewById(R.id.btnFavourite)
         btnRepeat = findViewById(R.id.btnRepeat)
+        upNextList = findViewById(R.id.upNextList)
+        txtUpNextCount = findViewById(R.id.txtUpNextCount)
 
         val homeScreen = findViewById<View>(R.id.homeScreen)
         val playerScreen = findViewById<View>(R.id.playerScreen)
@@ -280,6 +284,30 @@ class MainActivity : AppCompatActivity() {
 
         updateModeButtons()
         updateFavouriteButton()
+        updateUpNextQueue()
+
+        upNextList.setOnItemClickListener { _, _, position, _ ->
+            if (paths.isEmpty()) return@setOnItemClickListener
+
+            val baseIndex =
+                MusicService.currentIndex()
+                    .takeIf { it in paths.indices }
+                    ?: currentSong.takeIf { it in paths.indices }
+                    ?: -1
+
+            val queueIndices =
+                if (baseIndex >= 0) {
+                    ((baseIndex + 1) until paths.size).toList() +
+                        (0 until baseIndex).toList()
+                } else {
+                    paths.indices.toList()
+                }
+
+            queueIndices.getOrNull(position)?.let { index ->
+                playSong(index)
+                updateUpNextQueue()
+            }
+        }
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -400,12 +428,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         songList.adapter = SongAdapter(this, songs)
+        updateUpNextQueue()
     }
 
     private fun playSong(position: Int) {
         if (position !in paths.indices) return
 
         currentSong = position
+        updateUpNextQueue()
 
         val title = titles.getOrElse(position) { "Unknown title" }
         val artist = artists.getOrElse(position) { "Unknown Artist" }
@@ -582,6 +612,38 @@ class MainActivity : AppCompatActivity() {
 
             openSongFromLibrary(selected)
         }
+    }
+
+    private fun updateUpNextQueue() {
+        if (!::upNextList.isInitialized || !::txtUpNextCount.isInitialized) return
+
+        if (songs.isEmpty()) {
+            txtUpNextCount.text = "0 tracks"
+            upNextList.adapter = SongAdapter(this, emptyList())
+            return
+        }
+
+        val activeIndex =
+            MusicService.currentIndex()
+                .takeIf { it in songs.indices }
+                ?: currentSong.takeIf { it in songs.indices }
+                ?: -1
+
+        val queueIndices =
+            if (activeIndex >= 0) {
+                ((activeIndex + 1) until songs.size).toList() +
+                    (0 until activeIndex).toList()
+            } else {
+                songs.indices.toList()
+            }
+
+        val queueSongs = queueIndices.map { songs[it] }
+
+        txtUpNextCount.text =
+            if (queueSongs.size == 1) "1 track"
+            else "${queueSongs.size} tracks"
+
+        upNextList.adapter = SongAdapter(this, queueSongs)
     }
 
     private fun updateModeButtons() {
@@ -861,6 +923,7 @@ class MainActivity : AppCompatActivity() {
                     serviceIndex != currentSong
                 ) {
                     currentSong = serviceIndex
+                    updateUpNextQueue()
 
                     val title =
                         titles.getOrElse(serviceIndex) {

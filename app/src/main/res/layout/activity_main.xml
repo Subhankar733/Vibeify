@@ -393,6 +393,52 @@
 
                     </LinearLayout>
 
+                    <!-- UP NEXT -->
+                    <LinearLayout
+                        android:id="@+id/upNextSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="UP NEXT"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.18"/>
+
+                            <TextView
+                                android:id="@+id/txtUpNextCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 tracks"
+                                android:textColor="#777777"
+                                android:textSize="11sp"/>
+
+                        </LinearLayout>
+
+                        <ListView
+                            android:id="@+id/upNextList"
+                            android:layout_width="match_parent"
+                            android:layout_height="260dp"
+                            android:layout_marginTop="10dp"
+                            android:divider="@android:color/transparent"
+                            android:dividerHeight="4dp"
+                            android:listSelector="@android:color/transparent"
+                            android:scrollbars="none"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </FrameLayout>
         </ScrollView>
