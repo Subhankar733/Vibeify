@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Your music. Your vibe."
-                            android:textColor="#9C9CA6"
+                            android:textColor="#92969F"
                             android:textSize="14sp"/>
                     </LinearLayout>
 
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Pick up where you left off"
-                    android:textColor="#9C9CA6"
+                    android:textColor="#92969F"
                     android:textSize="15sp"/>
 
                 <LinearLayout
@@ -209,7 +209,7 @@
                         android:layout_height="42dp"
                         android:gravity="center"
                         android:text="▶"
-                        android:textColor="#09090B"
+                        android:textColor="#08090B"
                         android:textSize="17sp"
                         android:background="@drawable/home_play_button"/>
                 </LinearLayout>
@@ -364,7 +364,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Vibeify Music"
-                        android:textColor="#9D9DA5"
+                        android:textColor="#92969F"
                         android:textSize="14sp"
                         android:gravity="center"
                         android:paddingTop="7dp"
@@ -393,7 +393,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="0:00"
-                            android:textColor="#9D9DA5"
+                            android:textColor="#92969F"
                             android:textSize="12sp"/>
 
                         <TextView
@@ -401,7 +401,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0:00"
-                            android:textColor="#9D9DA5"
+                            android:textColor="#92969F"
                             android:textSize="12sp"/>
 
                     </LinearLayout>
@@ -507,7 +507,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Songs on your device"
-                android:textColor="#9D9DA5"
+                android:textColor="#92969F"
                 android:textSize="15sp"
                 android:paddingTop="7dp"
                 android:paddingBottom="18dp"/>
