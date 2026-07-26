@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
@@ -19,12 +20,6 @@ import android.widget.SeekBar
 import android.view.View
 import android.os.Handler
 import android.os.Looper
-import androidx.palette.graphics.Palette
-import androidx.core.graphics.ColorUtils
-import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -51,15 +46,11 @@ class MainActivity : AppCompatActivity() {
     }
     private val handler = Handler(Looper.getMainLooper())
 
-    private val songs = mutableListOf<Song>()
-
-    // Temporary compatibility bridge while playback moves to Song.
     private val titles = mutableListOf<String>()
     private val paths = mutableListOf<String>()
     private val artists = mutableListOf<String>()
     private val albums = mutableListOf<String>()
     private val durations = mutableListOf<Long>()
-
     private var currentSong = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,16 +100,12 @@ class MainActivity : AppCompatActivity() {
             val items = listOf(navHome, navPlayer, navLibrary, navSettings)
 
             items.forEach { item ->
-                item.setBackgroundResource(R.drawable.v2_nav_idle)
-                item.alpha = 0.48f
-                item.scaleX = 0.90f
-                item.scaleY = 0.90f
+                item.setBackgroundResource(R.drawable.v10_nav_idle)
+                item.alpha = 0.58f
             }
 
-            active.setBackgroundResource(R.drawable.v2_nav_active)
+            active.setBackgroundResource(R.drawable.v10_nav_active)
             active.alpha = 1.0f
-            active.scaleX = 1.0f
-            active.scaleY = 1.0f
         }
 
         cardLikedSongs.setOnClickListener {
@@ -188,6 +175,11 @@ class MainActivity : AppCompatActivity() {
                 sendPlaybackAction(MusicService.ACTION_PLAY)
                 btnPlay.setImageResource(R.drawable.ic_pause)
             }
+        }
+
+        songList.setOnItemClickListener { _, _, position, _ ->
+            playSong(position)
+            showScreen(playerScreen)
         }
 
         btnNext.setOnClickListener {
@@ -338,21 +330,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        songs.clear()
-
-        paths.indices.forEach { index ->
-            songs.add(
-                Song(
-                    title = titles[index],
-                    path = paths[index],
-                    artist = artists[index],
-                    album = albums[index],
-                    duration = durations[index]
-                )
-            )
-        }
-
-        songList.adapter = SongAdapter(this, songs)
+        songList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            titles
+        )
     }
 
     private fun playSong(position: Int) {
@@ -471,61 +453,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openSongFromLibrary(song: Song) {
-        val index = songs.indexOfFirst { it.path == song.path }
-
-        if (index < 0) return
-
-        playSong(index)
-
-        findViewById<View>(R.id.homeScreen).visibility = View.GONE
-        findViewById<View>(R.id.libraryScreen).visibility = View.GONE
-        findViewById<View>(R.id.settingsScreen).visibility = View.GONE
-        findViewById<View>(R.id.playerScreen).visibility = View.VISIBLE
-
-        val navItems = listOf(
-            findViewById<ImageButton>(R.id.navHome),
-            findViewById<ImageButton>(R.id.navPlayer),
-            findViewById<ImageButton>(R.id.navLibrary),
-            findViewById<ImageButton>(R.id.navSettings)
+    private fun showAllSongs() {
+        songList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            titles
         )
 
-        navItems.forEach {
-            it.setBackgroundResource(R.drawable.v10_nav_idle)
-            it.alpha = 0.58f
-        }
-
-        findViewById<ImageButton>(R.id.navPlayer).apply {
-            setBackgroundResource(R.drawable.v10_nav_active)
-            alpha = 1.0f
-        }
-    }
-
-    private fun showAllSongs() {
-        songList.adapter = SongAdapter(this, songs)
-
         songList.setOnItemClickListener { _, _, position, _ ->
-            val selected =
-                songs.getOrNull(position)
-                    ?: return@setOnItemClickListener
-
-            openSongFromLibrary(selected)
+            playSong(position)
         }
     }
 
     private fun showFavouriteSongs() {
-        val favouriteSongs = songs.filter { song ->
-            favourites.getBoolean(song.path, false)
+        val favouriteIndexes = paths.indices.filter { index ->
+            favourites.getBoolean(paths[index], false)
         }
 
-        songList.adapter = SongAdapter(this, favouriteSongs)
+        val favouriteTitles = favouriteIndexes.map { index ->
+            "♥ ${titles[index]}"
+        }
+
+        songList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            favouriteTitles
+        )
 
         songList.setOnItemClickListener { _, _, position, _ ->
-            val selected =
-                favouriteSongs.getOrNull(position)
-                    ?: return@setOnItemClickListener
-
-            openSongFromLibrary(selected)
+            if (position in favouriteIndexes.indices) {
+                playSong(favouriteIndexes[position])
+            }
         }
     }
 
@@ -576,139 +534,6 @@ class MainActivity : AppCompatActivity() {
         btnFavourite.alpha = if (isFavourite) 1.0f else 0.72f
     }
 
-    private fun applyAlbumPalette(bitmap: Bitmap) {
-        Palette.from(bitmap)
-            .maximumColorCount(24)
-            .generate { palette ->
-
-                if (palette == null || isFinishing || isDestroyed) {
-                    return@generate
-                }
-
-                val rawAccent =
-                    palette.vibrantSwatch?.rgb
-                        ?: palette.lightVibrantSwatch?.rgb
-                        ?: palette.mutedSwatch?.rgb
-                        ?: palette.darkVibrantSwatch?.rgb
-                        ?: palette.dominantSwatch?.rgb
-                        ?: Color.rgb(180, 190, 210)
-
-                // Keep the album's personality, but prevent unusably dark accents.
-                val accent =
-                    if (ColorUtils.calculateLuminance(rawAccent) < 0.16) {
-                        ColorUtils.blendARGB(rawAccent, Color.WHITE, 0.34f)
-                    } else {
-                        rawAccent
-                    }
-
-                val deep =
-                    ColorUtils.blendARGB(accent, Color.BLACK, 0.78f)
-
-                val ambient =
-                    ColorUtils.setAlphaComponent(accent, 72)
-
-                val glow =
-                    ColorUtils.setAlphaComponent(accent, 155)
-
-                val dock =
-                    ColorUtils.setAlphaComponent(deep, 220)
-
-                val playerAmbient =
-                    findViewById<View>(R.id.playerAmbient)
-
-                val playerArtGlow =
-                    findViewById<View>(R.id.playerArtGlow)
-
-                val playerPaletteOrb =
-                    findViewById<View>(R.id.playerPaletteOrb)
-
-                val playerVibeLine =
-                    findViewById<View>(R.id.playerVibeLine)
-
-                val playerControlDock =
-                    findViewById<View>(R.id.playerControlDock)
-
-                // V2 GLOBAL ALBUM ATMOSPHERE
-                val rebornRoot =
-                    findViewById<View>(R.id.rebornRoot)
-
-                val homeScreen =
-                    findViewById<View>(R.id.homeScreen)
-
-                val playerScreen =
-                    findViewById<View>(R.id.playerScreen)
-
-                val libraryScreen =
-                    findViewById<View>(R.id.libraryScreen)
-
-                val settingsScreen =
-                    findViewById<View>(R.id.settingsScreen)
-
-                val rebornNav =
-                    findViewById<View>(R.id.rebornNav)
-
-                val vibeDockArea =
-                    findViewById<View>(R.id.vibeDockArea)
-
-                val globalCanvas =
-                    androidx.core.graphics.ColorUtils.blendARGB(
-                        android.graphics.Color.rgb(7, 7, 9),
-                        accent,
-                        0.14f
-                    )
-
-                val screenAtmosphere =
-                    androidx.core.graphics.ColorUtils.blendARGB(
-                        android.graphics.Color.rgb(8, 8, 10),
-                        accent,
-                        0.09f
-                    )
-
-                val dockAtmosphere =
-                    androidx.core.graphics.ColorUtils.blendARGB(
-                        android.graphics.Color.rgb(15, 15, 18),
-                        accent,
-                        0.22f
-                    )
-
-                rebornRoot.setBackgroundColor(globalCanvas)
-
-                homeScreen.setBackgroundColor(screenAtmosphere)
-                playerScreen.setBackgroundColor(screenAtmosphere)
-                libraryScreen.setBackgroundColor(screenAtmosphere)
-                settingsScreen.setBackgroundColor(screenAtmosphere)
-
-                vibeDockArea.setBackgroundColor(globalCanvas)
-
-                rebornNav.backgroundTintList =
-                    ColorStateList.valueOf(dockAtmosphere)
-
-                playerAmbient.backgroundTintList =
-                    ColorStateList.valueOf(ambient)
-
-                playerArtGlow.backgroundTintList =
-                    ColorStateList.valueOf(glow)
-
-                playerPaletteOrb.backgroundTintList =
-                    ColorStateList.valueOf(accent)
-
-                playerVibeLine.backgroundTintList =
-                    ColorStateList.valueOf(accent)
-
-                playerControlDock.backgroundTintList =
-                    ColorStateList.valueOf(dock)
-
-                btnPlay.backgroundTintList =
-                    ColorStateList.valueOf(accent)
-
-                seekBar.progressTintList =
-                    ColorStateList.valueOf(accent)
-
-                seekBar.thumbTintList =
-                    ColorStateList.valueOf(accent)
-            }
-    }
-
     private fun loadAlbumArt(path: String) {
         val retriever = MediaMetadataRetriever()
 
@@ -727,7 +552,6 @@ class MainActivity : AppCompatActivity() {
                 if (bitmap != null) {
                     imgAlbumArt.setImageBitmap(bitmap)
                     imgAlbumArt.scaleType = ImageView.ScaleType.CENTER_CROP
-                    applyAlbumPalette(bitmap)
                     return
                 }
             }

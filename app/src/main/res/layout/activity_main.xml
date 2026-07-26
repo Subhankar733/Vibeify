@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="42dp"
-                    android:text="Your sound. Your atmosphere."
+                    android:text="Music that&#10;feels like yours."
                     android:textColor="#FFFFFF"
                     android:textSize="38sp"
                     android:textStyle="bold"/>
@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Music from this device, shaped around what is playing."
+                    android:text="Your library. Your mood. Nothing in the way."
                     android:textColor="#888888"
                     android:textSize="15sp"/>
 
@@ -58,17 +58,17 @@
                 <LinearLayout
                     android:id="@+id/cardQuickPick"
                     android:layout_width="match_parent"
-                    android:layout_height="168dp"
+                    android:layout_height="210dp"
                     android:layout_marginTop="38dp"
                     android:orientation="vertical"
                     android:gravity="bottom"
-                    android:padding="22dp"
+                    android:padding="26dp"
                     android:background="@drawable/reborn_surface">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="QUICK PLAY"
+                        android:text="START HERE"
                         android:textColor="#8A8A8A"
                         android:textSize="10sp"
                         android:textStyle="bold"
@@ -78,76 +78,111 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Drop into your music"
+                        android:text="Press play.&#10;We’ll take it from here."
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp"
+                        android:textSize="27sp"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="One tap. Let Vibeify choose."
-                        android:textColor="#888888"
+                        android:text="Instant music from your local collection  →"
+                        android:textColor="#A0A0A0"
                         android:textSize="13sp"/>
 
                 </LinearLayout>
 
-                <!-- LOCAL LIBRARY -->
+                <!-- HOME V2 COLLECTION -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="YOUR SPACE"
+                    android:textColor="#8A8A8A"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.20"/>
+
                 <LinearLayout
-                    android:id="@+id/cardLocalLibrary"
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
+                    android:layout_height="150dp"
                     android:layout_marginTop="14dp"
-                    android:gravity="center_vertical"
-                    android:paddingStart="22dp"
-                    android:paddingEnd="22dp"
-                    android:background="@drawable/reborn_surface">
+                    android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/cardLocalLibrary"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Local universe"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:layout_marginEnd="7dp"
+                        android:orientation="vertical"
+                        android:gravity="bottom"
+                        android:padding="20dp"
+                        android:background="@drawable/reborn_surface">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="#AAAAAA"
-                        android:textSize="25sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="↗"
+                            android:textColor="#AAAAAA"
+                            android:textSize="24sp"/>
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Library"
+                            android:textColor="#FFFFFF"
+                            android:textSize="19sp"
+                            android:textStyle="bold"/>
 
-                <!-- LIKED SONGS -->
-                <LinearLayout
-                    android:id="@+id/cardLikedSongs"
-                    android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="center_vertical"
-                    android:paddingStart="22dp"
-                    android:paddingEnd="22dp"
-                    android:background="@drawable/reborn_surface">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="On this device"
+                            android:textColor="#858585"
+                            android:textSize="12sp"/>
 
-                    <TextView
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardLikedSongs"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Loved tracks"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:layout_marginStart="7dp"
+                        android:orientation="vertical"
+                        android:gravity="bottom"
+                        android:padding="20dp"
+                        android:background="@drawable/reborn_surface">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="♡"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="♡"
+                            android:textColor="#FFFFFF"
+                            android:textSize="27sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="Loved"
+                            android:textColor="#FFFFFF"
+                            android:textSize="19sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Your favourites"
+                            android:textColor="#858585"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -392,7 +427,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="COLLECTION"
+                android:text="YOUR MUSIC"
                 android:textColor="#888888"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -403,7 +438,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Your universe"
+                android:text="Library"
                 android:textColor="#FFFFFF"
                 android:textSize="34sp"
                 android:textStyle="bold"/>
@@ -413,7 +448,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="Music living on this device"
+                android:text="Everything you keep close."
                 android:textColor="#888888"
                 android:textSize="14sp"/>
 
@@ -422,12 +457,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="26dp"
-                android:paddingBottom="20dp"
+                android:layout_marginTop="30dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="28dp"
                 android:clipToPadding="false"
-                android:divider="#242424"
-                android:dividerHeight="1dp"
-                android:listSelector="#202020"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10dp"
+                android:listSelector="@android:color/transparent"
                 android:scrollbars="none"/>
 
         </LinearLayout>
