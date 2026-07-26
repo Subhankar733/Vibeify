@@ -667,12 +667,6 @@ class MainActivity : AppCompatActivity() {
                 val playerArtGlow =
                     findViewById<View>(R.id.playerArtGlow)
 
-                val playerPaletteOrb =
-                    findViewById<View>(R.id.playerPaletteOrb)
-
-                val playerVibeLine =
-                    findViewById<View>(R.id.playerVibeLine)
-
                 val playerControlDock =
                     findViewById<View>(R.id.playerControlDock)
 
@@ -736,12 +730,6 @@ class MainActivity : AppCompatActivity() {
 
                 playerArtGlow.backgroundTintList =
                     ColorStateList.valueOf(glow)
-
-                playerPaletteOrb.backgroundTintList =
-                    ColorStateList.valueOf(accent)
-
-                playerVibeLine.backgroundTintList =
-                    ColorStateList.valueOf(accent)
 
                 playerControlDock.backgroundTintList =
                     ColorStateList.valueOf(dock)
