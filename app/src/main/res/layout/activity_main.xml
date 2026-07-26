@@ -358,35 +358,35 @@
                     <!-- SECONDARY CONTROLS -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="40dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageButton
                             android:id="@+id/btnShuffle"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:padding="9dp"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_shuffle"
                             android:background="@android:color/transparent"
                             android:contentDescription="Shuffle"/>
 
                         <ImageButton
                             android:id="@+id/btnFavourite"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginStart="28dp"
-                            android:layout_marginEnd="28dp"
-                            android:padding="9dp"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginEnd="24dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_favourite"
                             android:background="@android:color/transparent"
                             android:contentDescription="Favourite"/>
 
                         <ImageButton
                             android:id="@+id/btnRepeat"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:padding="9dp"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_repeat"
                             android:background="@android:color/transparent"
                             android:contentDescription="Repeat"/>
@@ -556,11 +556,11 @@
     <FrameLayout
         android:id="@+id/vibeDockArea"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="76dp"
         android:paddingStart="28dp"
         android:paddingEnd="28dp"
         android:paddingTop="4dp"
-        android:paddingBottom="6dp">
+        android:paddingBottom="12dp">
 
         <LinearLayout
             android:id="@+id/rebornNav"
