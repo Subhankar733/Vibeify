@@ -309,20 +309,19 @@
                 android:paddingStart="22dp"
                 android:paddingEnd="22dp"
                 android:paddingTop="22dp"
-                android:paddingBottom="34dp">
+                android:paddingBottom="32dp">
 
-                <!-- Minimal header -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="NOW PLAYING"
-                    android:textColor="#8D938E"
+                    android:textColor="#777E78"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.18"
+                    android:letterSpacing="0.20"
                     android:gravity="center"/>
 
-                <!-- Large immersive artwork -->
+                <!-- Rounded album artwork -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="340dp"
@@ -333,7 +332,8 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/album_art">
+                        android:background="@drawable/v7_art_clip"
+                        android:clipToOutline="true">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -353,7 +353,6 @@
                     </FrameLayout>
                 </FrameLayout>
 
-                <!-- Track identity -->
                 <TextView
                     android:id="@+id/txtNowPlaying"
                     android:layout_width="match_parent"
@@ -377,7 +376,6 @@
                     android:maxLines="1"
                     android:ellipsize="end"/>
 
-                <!-- Progress -->
                 <SeekBar
                     android:id="@+id/seekBar"
                     android:layout_width="match_parent"
@@ -415,7 +413,7 @@
 
                 </LinearLayout>
 
-                <!-- Main playback controls -->
+                <!-- Spotify-style control row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="108dp"
@@ -476,7 +474,6 @@
 
                 </LinearLayout>
 
-                <!-- Secondary action -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
