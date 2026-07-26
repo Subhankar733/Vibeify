@@ -106,12 +106,16 @@ class MainActivity : AppCompatActivity() {
             val items = listOf(navHome, navPlayer, navLibrary, navSettings)
 
             items.forEach { item ->
-                item.setBackgroundResource(R.drawable.v10_nav_idle)
-                item.alpha = 0.58f
+                item.setBackgroundResource(R.drawable.v2_nav_idle)
+                item.alpha = 0.48f
+                item.scaleX = 0.90f
+                item.scaleY = 0.90f
             }
 
-            active.setBackgroundResource(R.drawable.v10_nav_active)
+            active.setBackgroundResource(R.drawable.v2_nav_active)
             active.alpha = 1.0f
+            active.scaleX = 1.0f
+            active.scaleY = 1.0f
         }
 
         cardLikedSongs.setOnClickListener {
@@ -591,6 +595,61 @@ class MainActivity : AppCompatActivity() {
 
                 val playerControlDock =
                     findViewById<View>(R.id.playerControlDock)
+
+                // V2 GLOBAL ALBUM ATMOSPHERE
+                val rebornRoot =
+                    findViewById<View>(R.id.rebornRoot)
+
+                val homeScreen =
+                    findViewById<View>(R.id.homeScreen)
+
+                val playerScreen =
+                    findViewById<View>(R.id.playerScreen)
+
+                val libraryScreen =
+                    findViewById<View>(R.id.libraryScreen)
+
+                val settingsScreen =
+                    findViewById<View>(R.id.settingsScreen)
+
+                val rebornNav =
+                    findViewById<View>(R.id.rebornNav)
+
+                val vibeDockArea =
+                    findViewById<View>(R.id.vibeDockArea)
+
+                val globalCanvas =
+                    androidx.core.graphics.ColorUtils.blendARGB(
+                        android.graphics.Color.rgb(7, 7, 9),
+                        accent,
+                        0.14f
+                    )
+
+                val screenAtmosphere =
+                    androidx.core.graphics.ColorUtils.blendARGB(
+                        android.graphics.Color.rgb(8, 8, 10),
+                        accent,
+                        0.09f
+                    )
+
+                val dockAtmosphere =
+                    androidx.core.graphics.ColorUtils.blendARGB(
+                        android.graphics.Color.rgb(15, 15, 18),
+                        accent,
+                        0.22f
+                    )
+
+                rebornRoot.setBackgroundColor(globalCanvas)
+
+                homeScreen.setBackgroundColor(screenAtmosphere)
+                playerScreen.setBackgroundColor(screenAtmosphere)
+                libraryScreen.setBackgroundColor(screenAtmosphere)
+                settingsScreen.setBackgroundColor(screenAtmosphere)
+
+                vibeDockArea.setBackgroundColor(globalCanvas)
+
+                rebornNav.backgroundTintList =
+                    ColorStateList.valueOf(dockAtmosphere)
 
                 playerAmbient.backgroundTintList =
                     ColorStateList.valueOf(ambient)

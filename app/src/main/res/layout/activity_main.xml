@@ -527,59 +527,67 @@
 
     </FrameLayout>
 
-    <!-- REBORN NAVIGATION -->
-    <LinearLayout
-        android:id="@+id/rebornNav"
+    <!-- V2 FLOATING VIBE DOCK -->
+    <FrameLayout
+        android:id="@+id/vibeDockArea"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:layout_height="88dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:background="#0C0C0C">
+        android:paddingBottom="12dp">
 
-        <ImageButton
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/ic_nav_home"
-            android:background="@android:color/transparent"
-            android:contentDescription="Home"/>
+        <LinearLayout
+            android:id="@+id/rebornNav"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="7dp"
+            android:background="@drawable/v2_dock">
 
-        <ImageButton
-            android:id="@+id/navPlayer"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/ic_nav_player"
-            android:background="@android:color/transparent"
-            android:contentDescription="Player"/>
+            <ImageButton
+                android:id="@+id/navHome"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_nav_home"
+                android:background="@drawable/v2_nav_active"
+                android:contentDescription="Home"/>
 
-        <ImageButton
-            android:id="@+id/navLibrary"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/ic_nav_library"
-            android:background="@android:color/transparent"
-            android:contentDescription="Library"/>
+            <ImageButton
+                android:id="@+id/navPlayer"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_nav_player"
+                android:background="@drawable/v2_nav_idle"
+                android:contentDescription="Player"/>
 
-        <ImageButton
-            android:id="@+id/navSettings"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/ic_nav_settings"
-            android:background="@android:color/transparent"
-            android:contentDescription="Settings"/>
+            <ImageButton
+                android:id="@+id/navLibrary"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_nav_library"
+                android:background="@drawable/v2_nav_idle"
+                android:contentDescription="Library"/>
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/navSettings"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_nav_settings"
+                android:background="@drawable/v2_nav_idle"
+                android:contentDescription="Settings"/>
+
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
