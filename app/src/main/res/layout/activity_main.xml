@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#09090B">
+    android:background="#05070C">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -373,9 +373,12 @@
                     <SeekBar
                         android:id="@+id/seekBar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:progressTint="#F2D79A"
-                        android:thumbTint="#FFFFFF"/>
+                        android:layout_height="32dp"
+                        android:maxHeight="4dp"
+                        android:minHeight="4dp"
+                        android:progressDrawable="@drawable/seekbar_progress_rgb"
+                        android:thumb="@drawable/seekbar_thumb_neon"
+                        android:splitTrack="false"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -635,50 +638,61 @@
     <!-- BOTTOM NAV -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="84dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="#121216">
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/nav_bar_premium">
 
-        <Button
+        <ImageButton
             android:id="@+id/navHome"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="⌂&#10;HOME"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:backgroundTint="#121216"/>
+            android:layout_marginHorizontal="4dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_nav_home"
+            android:contentDescription="Home"
+            android:background="@drawable/nav_item_active"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/navPlayer"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="♫&#10;PLAYER"
-            android:textColor="#F2D79A"
-            android:textSize="12sp"
-            android:backgroundTint="#121216"/>
+            android:layout_marginHorizontal="4dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_nav_player"
+            android:contentDescription="Player"
+            android:background="@drawable/nav_item_idle"
+            android:alpha="0.58"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/navLibrary"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="☷&#10;LIBRARY"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:backgroundTint="#121216"/>
+            android:layout_marginHorizontal="4dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_nav_library"
+            android:contentDescription="Library"
+            android:background="@drawable/nav_item_idle"
+            android:alpha="0.58"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/navSettings"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="⚙&#10;SETTINGS"
-            android:textColor="#FFFFFF"
-            android:textSize="11sp"
-            android:backgroundTint="#121216"/>
+            android:layout_marginHorizontal="4dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_nav_settings"
+            android:contentDescription="Settings"
+            android:background="@drawable/nav_item_idle"
+            android:alpha="0.58"/>
 
     </LinearLayout>
 

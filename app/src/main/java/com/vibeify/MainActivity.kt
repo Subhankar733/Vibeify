@@ -83,10 +83,10 @@ class MainActivity : AppCompatActivity() {
         val txtLibraryTitle = findViewById<TextView>(R.id.txtLibraryTitle)
         val txtLibrarySubtitle = findViewById<TextView>(R.id.txtLibrarySubtitle)
 
-        val navHome = findViewById<Button>(R.id.navHome)
-        val navPlayer = findViewById<Button>(R.id.navPlayer)
-        val navLibrary = findViewById<Button>(R.id.navLibrary)
-        val navSettings = findViewById<Button>(R.id.navSettings)
+        val navHome = findViewById<ImageButton>(R.id.navHome)
+        val navPlayer = findViewById<ImageButton>(R.id.navPlayer)
+        val navLibrary = findViewById<ImageButton>(R.id.navLibrary)
+        val navSettings = findViewById<ImageButton>(R.id.navSettings)
 
         fun showScreen(screen: View) {
             homeScreen.visibility = View.GONE
@@ -94,6 +94,18 @@ class MainActivity : AppCompatActivity() {
             libraryScreen.visibility = View.GONE
             settingsScreen.visibility = View.GONE
             screen.visibility = View.VISIBLE
+        }
+
+        fun updateNavigation(active: ImageButton) {
+            val items = listOf(navHome, navPlayer, navLibrary, navSettings)
+
+            items.forEach { item ->
+                item.setBackgroundResource(R.drawable.nav_item_idle)
+                item.alpha = 0.58f
+            }
+
+            active.setBackgroundResource(R.drawable.nav_item_active)
+            active.alpha = 1.0f
         }
 
         cardLikedSongs.setOnClickListener {
@@ -125,10 +137,12 @@ class MainActivity : AppCompatActivity() {
 
         navHome.setOnClickListener {
             showScreen(homeScreen)
+            updateNavigation(navHome)
         }
 
         navPlayer.setOnClickListener {
             showScreen(playerScreen)
+            updateNavigation(navPlayer)
         }
 
         navLibrary.setOnClickListener {
@@ -136,13 +150,16 @@ class MainActivity : AppCompatActivity() {
             txtLibrarySubtitle.text = "Songs on your device"
             showAllSongs()
             showScreen(libraryScreen)
+            updateNavigation(navLibrary)
         }
 
         navSettings.setOnClickListener {
             showScreen(settingsScreen)
+            updateNavigation(navSettings)
         }
 
         showScreen(homeScreen)
+        updateNavigation(navHome)
 
         btnPlay.setOnClickListener {
             if (MusicService.currentPath == null) {
