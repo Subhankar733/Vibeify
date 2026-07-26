@@ -20,6 +20,12 @@ import android.widget.SeekBar
 import android.view.View
 import android.os.Handler
 import android.os.Looper
+import androidx.palette.graphics.Palette
+import androidx.core.graphics.ColorUtils
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -534,6 +540,84 @@ class MainActivity : AppCompatActivity() {
         btnFavourite.alpha = if (isFavourite) 1.0f else 0.72f
     }
 
+    private fun applyAlbumPalette(bitmap: Bitmap) {
+        Palette.from(bitmap)
+            .maximumColorCount(24)
+            .generate { palette ->
+
+                if (palette == null || isFinishing || isDestroyed) {
+                    return@generate
+                }
+
+                val rawAccent =
+                    palette.vibrantSwatch?.rgb
+                        ?: palette.lightVibrantSwatch?.rgb
+                        ?: palette.mutedSwatch?.rgb
+                        ?: palette.darkVibrantSwatch?.rgb
+                        ?: palette.dominantSwatch?.rgb
+                        ?: Color.rgb(180, 190, 210)
+
+                // Keep the album's personality, but prevent unusably dark accents.
+                val accent =
+                    if (ColorUtils.calculateLuminance(rawAccent) < 0.16) {
+                        ColorUtils.blendARGB(rawAccent, Color.WHITE, 0.34f)
+                    } else {
+                        rawAccent
+                    }
+
+                val deep =
+                    ColorUtils.blendARGB(accent, Color.BLACK, 0.78f)
+
+                val ambient =
+                    ColorUtils.setAlphaComponent(accent, 72)
+
+                val glow =
+                    ColorUtils.setAlphaComponent(accent, 155)
+
+                val dock =
+                    ColorUtils.setAlphaComponent(deep, 220)
+
+                val playerAmbient =
+                    findViewById<View>(R.id.playerAmbient)
+
+                val playerArtGlow =
+                    findViewById<View>(R.id.playerArtGlow)
+
+                val playerPaletteOrb =
+                    findViewById<View>(R.id.playerPaletteOrb)
+
+                val playerVibeLine =
+                    findViewById<View>(R.id.playerVibeLine)
+
+                val playerControlDock =
+                    findViewById<View>(R.id.playerControlDock)
+
+                playerAmbient.backgroundTintList =
+                    ColorStateList.valueOf(ambient)
+
+                playerArtGlow.backgroundTintList =
+                    ColorStateList.valueOf(glow)
+
+                playerPaletteOrb.backgroundTintList =
+                    ColorStateList.valueOf(accent)
+
+                playerVibeLine.backgroundTintList =
+                    ColorStateList.valueOf(accent)
+
+                playerControlDock.backgroundTintList =
+                    ColorStateList.valueOf(dock)
+
+                btnPlay.backgroundTintList =
+                    ColorStateList.valueOf(accent)
+
+                seekBar.progressTintList =
+                    ColorStateList.valueOf(accent)
+
+                seekBar.thumbTintList =
+                    ColorStateList.valueOf(accent)
+            }
+    }
+
     private fun loadAlbumArt(path: String) {
         val retriever = MediaMetadataRetriever()
 
@@ -552,6 +636,7 @@ class MainActivity : AppCompatActivity() {
                 if (bitmap != null) {
                     imgAlbumArt.setImageBitmap(bitmap)
                     imgAlbumArt.scaleType = ImageView.ScaleType.CENTER_CROP
+                    applyAlbumPalette(bitmap)
                     return
                 }
             }
