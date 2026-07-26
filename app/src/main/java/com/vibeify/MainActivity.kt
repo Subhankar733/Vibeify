@@ -537,14 +537,22 @@ class MainActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.navSettings)
         )
 
-        navItems.forEach {
-            it.setBackgroundResource(R.drawable.v10_nav_idle)
-            it.alpha = 0.58f
-        }
+        navItems.forEach { item ->
+            item.setBackgroundResource(
+                if (item.id == R.id.navPlayer)
+                    R.drawable.v2_nav_active
+                else
+                    R.drawable.v2_nav_idle
+            )
 
-        findViewById<ImageButton>(R.id.navPlayer).apply {
-            setBackgroundResource(R.drawable.v10_nav_active)
-            alpha = 1.0f
+            item.alpha =
+                if (item.id == R.id.navPlayer) 1.0f else 0.46f
+
+            item.scaleX =
+                if (item.id == R.id.navPlayer) 1.08f else 0.88f
+
+            item.scaleY =
+                if (item.id == R.id.navPlayer) 1.08f else 0.88f
         }
     }
 
@@ -580,47 +588,31 @@ class MainActivity : AppCompatActivity() {
         shuffleEnabled = MusicService.shuffleEnabled
         repeatEnabled = MusicService.repeatEnabled
 
-
-        btnShuffle.setBackgroundResource(
-            if (shuffleEnabled)
-                R.drawable.v10_mode_on
-            else
-                R.drawable.v10_mode_off
-        )
-
-        btnRepeat.setBackgroundResource(
-            if (repeatEnabled)
-                R.drawable.v10_mode_on
-            else
-                R.drawable.v10_mode_off
-        )
-
-        btnShuffle.alpha =
-            if (shuffleEnabled) 1.0f else 0.72f
-
-        btnRepeat.alpha =
-            if (repeatEnabled) 1.0f else 0.72f
+        updateSecondaryControlState(btnShuffle, shuffleEnabled)
+        updateSecondaryControlState(btnRepeat, repeatEnabled)
     }
 
     private fun updateFavouriteButton() {
-        if (currentSong < 0 || currentSong >= paths.size) {
-            btnFavourite.setImageResource(R.drawable.ic_favourite)
-            return
-        }
-
-        val isFavourite = favourites.getBoolean(
-            paths[currentSong],
-            false
-        )
+        val isFavourite =
+            currentSong in paths.indices &&
+                favourites.getBoolean(paths[currentSong], false)
 
         btnFavourite.setImageResource(R.drawable.ic_favourite)
-        btnFavourite.setBackgroundResource(
-            if (isFavourite)
-                R.drawable.v10_mode_on
-            else
-                R.drawable.v10_mode_off
-        )
-        btnFavourite.alpha = if (isFavourite) 1.0f else 0.72f
+        updateSecondaryControlState(btnFavourite, isFavourite)
+    }
+
+    private fun updateSecondaryControlState(
+        button: ImageButton,
+        active: Boolean
+    ) {
+        button.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+
+        button.animate()
+            .alpha(if (active) 1.0f else 0.62f)
+            .scaleX(if (active) 1.10f else 1.0f)
+            .scaleY(if (active) 1.10f else 1.0f)
+            .setDuration(140L)
+            .start()
     }
 
     private fun applyAlbumPalette(bitmap: Bitmap) {
