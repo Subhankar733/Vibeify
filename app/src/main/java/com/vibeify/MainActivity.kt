@@ -100,11 +100,11 @@ class MainActivity : AppCompatActivity() {
             val items = listOf(navHome, navPlayer, navLibrary, navSettings)
 
             items.forEach { item ->
-                item.setBackgroundResource(R.drawable.v9_nav_idle)
+                item.setBackgroundResource(R.drawable.v10_nav_idle)
                 item.alpha = 0.58f
             }
 
-            active.setBackgroundResource(R.drawable.v9_nav_active)
+            active.setBackgroundResource(R.drawable.v10_nav_active)
             active.alpha = 1.0f
         }
 
@@ -494,16 +494,16 @@ class MainActivity : AppCompatActivity() {
 
         btnShuffle.setBackgroundResource(
             if (shuffleEnabled)
-                R.drawable.v9_mode_on
+                R.drawable.v10_mode_on
             else
-                R.drawable.v9_mode_off
+                R.drawable.v10_mode_off
         )
 
         btnRepeat.setBackgroundResource(
             if (repeatEnabled)
-                R.drawable.v9_mode_on
+                R.drawable.v10_mode_on
             else
-                R.drawable.v9_mode_off
+                R.drawable.v10_mode_off
         )
 
         btnShuffle.alpha =
@@ -527,9 +527,9 @@ class MainActivity : AppCompatActivity() {
         btnFavourite.setImageResource(R.drawable.ic_favourite)
         btnFavourite.setBackgroundResource(
             if (isFavourite)
-                R.drawable.v9_mode_on
+                R.drawable.v10_mode_on
             else
-                R.drawable.v9_mode_off
+                R.drawable.v10_mode_off
         )
         btnFavourite.alpha = if (isFavourite) 1.0f else 0.72f
     }

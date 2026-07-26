@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#060708">
+    android:background="#05070A">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                         android:layout_height="52dp"
                         android:gravity="center"
                         android:text="♫"
-                        android:textColor="#F5F1E8"
+                        android:textColor="#F4F7FB"
                         android:textSize="22sp"
                         android:background="@drawable/home_logo"/>
                 </LinearLayout>
@@ -102,16 +102,16 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="14dp"
-                        android:background="@drawable/v9_surface">
+                        android:background="@drawable/v10_surface">
 
                         <TextView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:gravity="center"
                             android:text="♥"
-                            android:textColor="#F5F1E8"
+                            android:textColor="#F4F7FB"
                             android:textSize="21sp"
-                            android:background="@drawable/v9_gold_tile"/>
+                            android:background="@drawable/v10_accent"/>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -146,16 +146,16 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="14dp"
-                        android:background="@drawable/v9_surface">
+                        android:background="@drawable/v10_surface">
 
                         <TextView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:gravity="center"
                             android:text="☷"
-                            android:textColor="#F5F1E8"
+                            android:textColor="#F4F7FB"
                             android:textSize="21sp"
-                            android:background="@drawable/v9_gold_tile"/>
+                            android:background="@drawable/v10_accent"/>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -200,16 +200,16 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="13dp"
-                    android:background="@drawable/v9_surface">
+                    android:background="@drawable/v10_surface">
 
                     <TextView
                         android:layout_width="68dp"
                         android:layout_height="68dp"
                         android:gravity="center"
                         android:text="♫"
-                        android:textColor="#F5F1E8"
+                        android:textColor="#F4F7FB"
                         android:textSize="28sp"
-                        android:background="@drawable/v9_gold_tile"/>
+                        android:background="@drawable/v10_accent"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -272,16 +272,16 @@
                             android:layout_height="216dp"
                             android:orientation="vertical"
                             android:padding="12dp"
-                            android:background="@drawable/v9_surface_soft">
+                            android:background="@drawable/v10_surface_soft">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="145dp"
                                 android:gravity="center"
                                 android:text="♫"
-                                android:textColor="#F5F1E8"
+                                android:textColor="#F4F7FB"
                                 android:textSize="46sp"
-                                android:background="@drawable/v9_gold_tile"/>
+                                android:background="@drawable/v10_accent"/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -299,14 +299,14 @@
                             android:layout_marginStart="14dp"
                             android:orientation="vertical"
                             android:padding="12dp"
-                            android:background="@drawable/v9_surface_soft">
+                            android:background="@drawable/v10_surface_soft">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="145dp"
                                 android:gravity="center"
                                 android:text="♪"
-                                android:textColor="#F5F1E8"
+                                android:textColor="#F4F7FB"
                                 android:textSize="46sp"
                                 android:background="@drawable/home_alt_art"/>
 
@@ -420,8 +420,8 @@
                     android:layout_marginTop="21dp"
                     android:maxHeight="3dp"
                     android:minHeight="3dp"
-                    android:progressDrawable="@drawable/v9_seek_progress"
-                    android:thumb="@drawable/v9_seek_thumb"
+                    android:progressDrawable="@drawable/v10_seek"
+                    android:thumb="@drawable/v10_thumb"
                     android:splitTrack="false"/>
 
                 <LinearLayout
@@ -487,7 +487,7 @@
                         android:padding="22dp"
                         android:src="@drawable/ic_play"
                         android:contentDescription="Play or pause"
-                        android:background="@drawable/v9_gold_play"/>
+                        android:background="@drawable/v10_play"/>
 
                     <ImageButton
                         android:id="@+id/btnNext"
@@ -520,12 +520,12 @@
 
                     <ImageButton
                         android:id="@+id/btnFavourite"
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
-                        android:padding="14dp"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:padding="13dp"
                         android:src="@drawable/ic_favourite"
                         android:contentDescription="Favourite"
-                        android:background="@drawable/v9_mode_off"/>
+                        android:background="@drawable/v10_mode_off"/>
 
                 </LinearLayout>
 
@@ -549,7 +549,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VIBEIFY"
-                android:textColor="#D6B86A"
+                android:textColor="#A9C7FF"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.18"/>
@@ -623,7 +623,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="›"
-                    android:textColor="#D6B86A"
+                    android:textColor="#A9C7FF"
                     android:textSize="28sp"/>
 
             </LinearLayout>
@@ -695,7 +695,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VIBEIFY"
-                    android:textColor="#D6B86A"
+                    android:textColor="#A9C7FF"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.18"/>
@@ -773,7 +773,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:text="Playback and audio options"
-                                android:textColor="#8A8985"
+                                android:textColor="#949BA7"
                                 android:textSize="12sp"/>
 
                         </LinearLayout>
@@ -830,7 +830,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:text="Music stored on your device"
-                                android:textColor="#8A8985"
+                                android:textColor="#949BA7"
                                 android:textSize="12sp"/>
 
                         </LinearLayout>
@@ -902,7 +902,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:text="Theme, colors and display"
-                                android:textColor="#8A8985"
+                                android:textColor="#949BA7"
                                 android:textSize="12sp"/>
 
                         </LinearLayout>
@@ -974,7 +974,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:text="Manage local music data"
-                                android:textColor="#8A8985"
+                                android:textColor="#949BA7"
                                 android:textSize="12sp"/>
 
                         </LinearLayout>
@@ -1031,7 +1031,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:text="Version 1.0"
-                                android:textColor="#8A8985"
+                                android:textColor="#949BA7"
                                 android:textSize="12sp"/>
 
                         </LinearLayout>
@@ -1055,60 +1055,60 @@
     <!-- BOTTOM NAV -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="68dp"
         android:orientation="horizontal"
         android:gravity="center"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:background="@drawable/v9_nav">
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:background="@drawable/v10_nav">
 
         <ImageButton
             android:id="@+id/navHome"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            android:padding="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:padding="14dp"
             android:src="@drawable/ic_nav_home"
             android:contentDescription="Home"
-            android:background="@drawable/v9_nav_active"/>
+            android:background="@drawable/v10_nav_active"/>
 
         <ImageButton
             android:id="@+id/navPlayer"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            android:padding="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:padding="14dp"
             android:src="@drawable/ic_nav_player"
             android:contentDescription="Player"
-            android:background="@drawable/v9_nav_idle"
+            android:background="@drawable/v10_nav_idle"
             android:alpha="0.58"/>
 
         <ImageButton
             android:id="@+id/navLibrary"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            android:padding="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:padding="14dp"
             android:src="@drawable/ic_nav_library"
             android:contentDescription="Library"
-            android:background="@drawable/v9_nav_idle"
+            android:background="@drawable/v10_nav_idle"
             android:alpha="0.58"/>
 
         <ImageButton
             android:id="@+id/navSettings"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            android:padding="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:padding="14dp"
             android:src="@drawable/ic_nav_settings"
             android:contentDescription="Settings"
-            android:background="@drawable/v9_nav_idle"
+            android:background="@drawable/v10_nav_idle"
             android:alpha="0.58"/>
 
     </LinearLayout>
