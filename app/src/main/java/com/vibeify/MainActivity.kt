@@ -218,7 +218,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         requestAudioPermission()
-        requestNotificationPermission()
     }
 
     private fun requestNotificationPermission() {
@@ -239,6 +238,7 @@ class MainActivity : AppCompatActivity() {
                 PackageManager.PERMISSION_GRANTED
             ) {
                 loadSongs()
+                requestNotificationPermission()
             } else {
                 requestPermissions(
                     arrayOf(Manifest.permission.READ_MEDIA_AUDIO),
@@ -385,11 +385,14 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == 100 &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            loadSongs()
+        if (requestCode == 100) {
+            if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                loadSongs()
+            }
+
+            requestNotificationPermission()
         }
     }
 
