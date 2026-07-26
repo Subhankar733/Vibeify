@@ -557,27 +557,27 @@
         android:id="@+id/vibeDockArea"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="8dp">
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="6dp">
 
         <LinearLayout
             android:id="@+id/rebornNav"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
+            android:layout_height="52dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:gravity="center"
-            android:padding="7dp"
+            android:padding="6dp"
             android:background="@drawable/v2_dock">
 
             <ImageButton
                 android:id="@+id/navHome"
                 android:layout_width="0dp"
-                android:layout_height="46dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:src="@drawable/ic_nav_home"
                 android:background="@drawable/v2_nav_active"
                 android:contentDescription="Home"/>
@@ -585,9 +585,9 @@
             <ImageButton
                 android:id="@+id/navPlayer"
                 android:layout_width="0dp"
-                android:layout_height="46dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:src="@drawable/ic_nav_player"
                 android:background="@drawable/v2_nav_idle"
                 android:contentDescription="Player"/>
@@ -595,9 +595,9 @@
             <ImageButton
                 android:id="@+id/navLibrary"
                 android:layout_width="0dp"
-                android:layout_height="46dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:src="@drawable/ic_nav_library"
                 android:background="@drawable/v2_nav_idle"
                 android:contentDescription="Library"/>
@@ -605,9 +605,9 @@
             <ImageButton
                 android:id="@+id/navSettings"
                 android:layout_width="0dp"
-                android:layout_height="46dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:src="@drawable/ic_nav_settings"
                 android:background="@drawable/v2_nav_idle"
                 android:contentDescription="Settings"/>

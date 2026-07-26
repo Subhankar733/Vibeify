@@ -119,15 +119,14 @@ class MainActivity : AppCompatActivity() {
 
             items.forEach { item ->
                 item.setBackgroundResource(R.drawable.v2_nav_idle)
-                item.alpha = 0.48f
-                item.scaleX = 0.90f
-                item.scaleY = 0.90f
-            }
 
-            active.setBackgroundResource(R.drawable.v2_nav_active)
-            active.alpha = 1.0f
-            active.scaleX = 1.0f
-            active.scaleY = 1.0f
+                item.animate()
+                    .alpha(if (item === active) 1.0f else 0.46f)
+                    .scaleX(if (item === active) 1.08f else 0.88f)
+                    .scaleY(if (item === active) 1.08f else 0.88f)
+                    .setDuration(160L)
+                    .start()
+            }
         }
 
         cardLikedSongs.setOnClickListener {
