@@ -415,9 +415,9 @@
                             android:layout_height="48dp"
                             android:layout_weight="1"
                             android:text="🔀"
-                            android:textSize="15sp"
+                            android:textSize="20sp"
                             android:textColor="#FFFFFF"
-                            android:backgroundTint="#1F1F25"/>
+                            android:background="@drawable/player_mode_off"/>
 
                         <Button
                             android:id="@+id/btnFavourite"
@@ -426,9 +426,9 @@
                             android:layout_weight="1"
                             android:layout_marginHorizontal="8dp"
                             android:text="♡"
-                            android:textSize="22sp"
+                            android:textSize="24sp"
                             android:textColor="#FFFFFF"
-                            android:backgroundTint="#1F1F25"/>
+                            android:background="@drawable/player_mode_off"/>
 
                         <Button
                             android:id="@+id/btnRepeat"
@@ -436,9 +436,9 @@
                             android:layout_height="48dp"
                             android:layout_weight="1"
                             android:text="🔁"
-                            android:textSize="15sp"
+                            android:textSize="20sp"
                             android:textColor="#FFFFFF"
-                            android:backgroundTint="#1F1F25"/>
+                            android:background="@drawable/player_mode_off"/>
 
                     </LinearLayout>
 

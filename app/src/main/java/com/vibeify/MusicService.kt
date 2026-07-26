@@ -48,6 +48,20 @@ class MusicService : Service() {
         private val playlistArtists = mutableListOf<String>()
         private var currentIndex = -1
 
+        var shuffleEnabled = false
+            private set
+
+        var repeatEnabled = false
+            private set
+
+        fun toggleShuffle() {
+            shuffleEnabled = !shuffleEnabled
+        }
+
+        fun toggleRepeat() {
+            repeatEnabled = !repeatEnabled
+        }
+
         fun currentIndex(): Int {
             return currentIndex
         }
@@ -177,7 +191,11 @@ class MusicService : Service() {
                 start()
 
                 setOnCompletionListener {
-                    playNext()
+                    if (repeatEnabled && currentIndex >= 0) {
+                        playIndex(currentIndex)
+                    } else {
+                        playNext()
+                    }
                 }
             }
 
@@ -215,10 +233,17 @@ class MusicService : Service() {
         if (playlistPaths.isEmpty()) return
 
         val next =
-            if (currentIndex + 1 < playlistPaths.size)
+            if (shuffleEnabled && playlistPaths.size > 1) {
+                var candidate: Int
+                do {
+                    candidate = kotlin.random.Random.nextInt(playlistPaths.size)
+                } while (candidate == currentIndex)
+                candidate
+            } else if (currentIndex + 1 < playlistPaths.size) {
                 currentIndex + 1
-            else
+            } else {
                 0
+            }
 
         playIndex(next)
     }
@@ -227,10 +252,17 @@ class MusicService : Service() {
         if (playlistPaths.isEmpty()) return
 
         val previous =
-            if (currentIndex - 1 >= 0)
+            if (shuffleEnabled && playlistPaths.size > 1) {
+                var candidate: Int
+                do {
+                    candidate = kotlin.random.Random.nextInt(playlistPaths.size)
+                } while (candidate == currentIndex)
+                candidate
+            } else if (currentIndex - 1 >= 0) {
                 currentIndex - 1
-            else
+            } else {
                 playlistPaths.lastIndex
+            }
 
         playIndex(previous)
     }

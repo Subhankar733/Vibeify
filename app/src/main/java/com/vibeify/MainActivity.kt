@@ -165,25 +165,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnNext.setOnClickListener {
-            if (titles.isNotEmpty()) {
-                playSong(getNextSongIndex())
+            if (MusicService.currentPath != null) {
+                sendPlaybackAction(MusicService.ACTION_NEXT)
+            } else if (titles.isNotEmpty()) {
+                playSong(0)
             }
         }
 
         btnPrevious.setOnClickListener {
-            if (titles.isNotEmpty()) {
-                val previous = getPreviousSongIndex()
-                playSong(previous)
+            if (MusicService.currentPath != null) {
+                sendPlaybackAction(MusicService.ACTION_PREVIOUS)
+            } else if (titles.isNotEmpty()) {
+                playSong(0)
             }
         }
 
         btnShuffle.setOnClickListener {
-            shuffleEnabled = !shuffleEnabled
+            MusicService.toggleShuffle()
+            shuffleEnabled = MusicService.shuffleEnabled
             updateModeButtons()
         }
 
         btnRepeat.setOnClickListener {
-            repeatEnabled = !repeatEnabled
+            MusicService.toggleRepeat()
+            repeatEnabled = MusicService.repeatEnabled
             updateModeButtons()
         }
 
@@ -462,8 +467,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateModeButtons() {
-        btnShuffle.text = if (shuffleEnabled) "🔀 ON" else "🔀"
-        btnRepeat.text = if (repeatEnabled) "🔁 ON" else "🔁"
+        shuffleEnabled = MusicService.shuffleEnabled
+        repeatEnabled = MusicService.repeatEnabled
+
+        btnShuffle.text = "🔀"
+        btnRepeat.text = "🔁"
+
+        btnShuffle.setBackgroundResource(
+            if (shuffleEnabled)
+                R.drawable.player_mode_on
+            else
+                R.drawable.player_mode_off
+        )
+
+        btnRepeat.setBackgroundResource(
+            if (repeatEnabled)
+                R.drawable.player_mode_on
+            else
+                R.drawable.player_mode_off
+        )
+
+        btnShuffle.alpha =
+            if (shuffleEnabled) 1.0f else 0.72f
+
+        btnRepeat.alpha =
+            if (repeatEnabled) 1.0f else 0.72f
     }
 
     private fun updateFavouriteButton() {
@@ -525,6 +553,69 @@ class MainActivity : AppCompatActivity() {
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         return String.format("%d:%02d", minutes, seconds)
+    }
+
+    private fun syncPlayerUiFromService() {
+        val serviceIndex = MusicService.currentIndex()
+
+        if (serviceIndex in paths.indices) {
+            currentSong = serviceIndex
+
+            val title = titles.getOrElse(serviceIndex) {
+                MusicService.currentTitle
+            }
+
+            val artist = artists.getOrElse(serviceIndex) {
+                MusicService.currentArtist
+            }
+
+            val album = albums.getOrElse(serviceIndex) {
+                "Unknown Album"
+            }
+
+            txtNowPlaying.text = title
+
+            txtArtist.text =
+                if (album == "Unknown Album") {
+                    artist
+                } else {
+                    "$artist • $album"
+                }
+
+            loadAlbumArt(paths[serviceIndex])
+            updateFavouriteButton()
+        } else if (MusicService.currentPath != null) {
+            txtNowPlaying.text = MusicService.currentTitle
+            txtArtist.text = MusicService.currentArtist
+
+            MusicService.currentPath?.let { path ->
+                loadAlbumArt(path)
+            }
+        }
+
+        val duration = MusicService.duration()
+        val position = MusicService.position()
+
+        if (duration > 0) {
+            seekBar.max = duration
+            txtTotalTime.text = formatTime(duration.toLong())
+        }
+
+        seekBar.progress = position.coerceAtMost(seekBar.max)
+        txtCurrentTime.text = formatTime(position.toLong())
+
+        btnPlay.text =
+            if (MusicService.isPlaying()) "❚❚"
+            else "▶"
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (MusicService.currentPath != null) {
+            syncPlayerUiFromService()
+            updateSeekBar()
+        }
     }
 
     private fun updateSeekBar() {
