@@ -89,6 +89,15 @@ class MainActivity : AppCompatActivity() {
         val cardLocalLibrary = findViewById<View>(R.id.cardLocalLibrary)
         val cardQuickPick = findViewById<View>(R.id.cardQuickPick)
 
+        val settingsPlayback =
+            findViewById<View>(R.id.settingsPlayback)
+        val settingsLocalMusic =
+            findViewById<View>(R.id.settingsLocalMusic)
+        val settingsVisualAtmosphere =
+            findViewById<View>(R.id.settingsVisualAtmosphere)
+        val settingsAbout =
+            findViewById<View>(R.id.settingsAbout)
+
         val txtLibraryTitle = findViewById<TextView>(R.id.txtLibraryTitle)
         val txtLibrarySubtitle = findViewById<TextView>(R.id.txtLibrarySubtitle)
 
@@ -169,6 +178,45 @@ class MainActivity : AppCompatActivity() {
         navSettings.setOnClickListener {
             showScreen(settingsScreen)
             updateNavigation(navSettings)
+        }
+
+        settingsPlayback.setOnClickListener {
+            showScreen(playerScreen)
+            updateNavigation(navPlayer)
+
+            if (MusicService.currentPath != null) {
+                syncPlayerUiFromService()
+                updateSeekBar()
+            }
+        }
+
+        settingsLocalMusic.setOnClickListener {
+            txtLibraryTitle.text = "YOUR LIBRARY"
+            txtLibrarySubtitle.text = "Songs on your device"
+            showAllSongs()
+            showScreen(libraryScreen)
+            updateNavigation(navLibrary)
+        }
+
+        settingsVisualAtmosphere.setOnClickListener {
+            imgAlbumArt.animate()
+                .alpha(0.65f)
+                .setDuration(180)
+                .withEndAction {
+                    imgAlbumArt.animate()
+                        .alpha(1.0f)
+                        .setDuration(220)
+                        .start()
+                }
+                .start()
+        }
+
+        settingsAbout.setOnClickListener {
+            android.widget.Toast.makeText(
+                this,
+                "Vibeify • Local music, your way.",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
         }
 
         showScreen(homeScreen)
