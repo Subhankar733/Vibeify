@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.media.MediaMetadataRetriever
 import android.graphics.BitmapFactory
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -23,19 +24,19 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btnPlay: Button
+    private lateinit var btnPlay: ImageButton
     private lateinit var txtNowPlaying: TextView
     private lateinit var txtArtist: TextView
     private lateinit var imgAlbumArt: ImageView
     private lateinit var songList: ListView
-    private lateinit var btnPrevious: Button
-    private lateinit var btnNext: Button
+    private lateinit var btnPrevious: ImageButton
+    private lateinit var btnNext: ImageButton
     private lateinit var seekBar: SeekBar
     private lateinit var txtCurrentTime: TextView
     private lateinit var txtTotalTime: TextView
-    private lateinit var btnShuffle: Button
-    private lateinit var btnFavourite: Button
-    private lateinit var btnRepeat: Button
+    private lateinit var btnShuffle: ImageButton
+    private lateinit var btnFavourite: ImageButton
+    private lateinit var btnRepeat: ImageButton
 
     private var shuffleEnabled = false
     private var repeatEnabled = false
@@ -152,10 +153,10 @@ class MainActivity : AppCompatActivity() {
                 }
             } else if (MusicService.isPlaying()) {
                 sendPlaybackAction(MusicService.ACTION_PAUSE)
-                btnPlay.text = "▶"
+                btnPlay.setImageResource(R.drawable.ic_play)
             } else {
                 sendPlaybackAction(MusicService.ACTION_PLAY)
-                btnPlay.text = "❚❚"
+                btnPlay.setImageResource(R.drawable.ic_pause)
             }
         }
 
@@ -362,7 +363,7 @@ class MainActivity : AppCompatActivity() {
 
         ContextCompat.startForegroundService(this, intent)
 
-        btnPlay.text = "❚❚"
+        btnPlay.setImageResource(R.drawable.ic_pause)
 
         val knownDuration =
             durations.getOrElse(position) { 0L }
@@ -473,8 +474,6 @@ class MainActivity : AppCompatActivity() {
         shuffleEnabled = MusicService.shuffleEnabled
         repeatEnabled = MusicService.repeatEnabled
 
-        btnShuffle.text = "🔀"
-        btnRepeat.text = "🔁"
 
         btnShuffle.setBackgroundResource(
             if (shuffleEnabled)
@@ -499,7 +498,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateFavouriteButton() {
         if (currentSong < 0 || currentSong >= paths.size) {
-            btnFavourite.text = "♡"
+            btnFavourite.setImageResource(R.drawable.ic_favourite)
             return
         }
 
@@ -508,7 +507,14 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
-        btnFavourite.text = if (isFavourite) "♥" else "♡"
+        btnFavourite.setImageResource(R.drawable.ic_favourite)
+        btnFavourite.setBackgroundResource(
+            if (isFavourite)
+                R.drawable.player_mode_on
+            else
+                R.drawable.player_mode_off
+        )
+        btnFavourite.alpha = if (isFavourite) 1.0f else 0.72f
     }
 
     private fun loadAlbumArt(path: String) {
@@ -607,9 +613,12 @@ class MainActivity : AppCompatActivity() {
         seekBar.progress = position.coerceAtMost(seekBar.max)
         txtCurrentTime.text = formatTime(position.toLong())
 
-        btnPlay.text =
-            if (MusicService.isPlaying()) "❚❚"
-            else "▶"
+        btnPlay.setImageResource(
+            if (MusicService.isPlaying())
+                R.drawable.ic_pause
+            else
+                R.drawable.ic_play
+        )
     }
 
     override fun onResume() {
@@ -676,9 +685,12 @@ class MainActivity : AppCompatActivity() {
                 txtCurrentTime.text =
                     formatTime(position.toLong())
 
-                btnPlay.text =
-                    if (MusicService.isPlaying()) "❚❚"
-                    else "▶"
+                btnPlay.setImageResource(
+            if (MusicService.isPlaying())
+                R.drawable.ic_pause
+            else
+                R.drawable.ic_play
+        )
 
                 handler.postDelayed(this, 500)
             }
