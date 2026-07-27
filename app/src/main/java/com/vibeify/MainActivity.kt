@@ -102,6 +102,62 @@ class MainActivity : AppCompatActivity() {
         val settingsAbout =
             findViewById<View>(R.id.settingsAbout)
 
+        val settingsPlaybackStatus =
+            findViewById<TextView>(R.id.settingsPlaybackStatus)
+        val settingsShuffle =
+            findViewById<TextView>(R.id.settingsShuffle)
+        val settingsRepeat =
+            findViewById<TextView>(R.id.settingsRepeat)
+        val settingsLibraryStatus =
+            findViewById<TextView>(R.id.settingsLibraryStatus)
+        val settingsRescan =
+            findViewById<TextView>(R.id.settingsRescan)
+        val settingsAtmosphereToggle =
+            findViewById<TextView>(R.id.settingsAtmosphereToggle)
+        val settingsVersion =
+            findViewById<TextView>(R.id.settingsVersion)
+
+        val vibeSettings =
+            getSharedPreferences("vibeify_settings", MODE_PRIVATE)
+
+        var atmosphereEnabled =
+            vibeSettings.getBoolean("album_atmosphere", true)
+
+        fun refreshSettingsUi() {
+            settingsShuffle.text =
+                "Shuffle                         " +
+                    if (MusicService.shuffleEnabled) "ON" else "OFF"
+
+            settingsRepeat.text =
+                "Repeat current track          " +
+                    if (MusicService.repeatEnabled) "ON" else "OFF"
+
+            settingsAtmosphereToggle.text =
+                "Album colour atmosphere       " +
+                    if (atmosphereEnabled) "ON" else "OFF"
+
+            settingsPlaybackStatus.text =
+                when {
+                    MusicService.currentPath == null ->
+                        "Nothing playing"
+
+                    MusicService.isPlaying() ->
+                        "Playing • ${MusicService.currentTitle}"
+
+                    else ->
+                        "Paused • ${MusicService.currentTitle}"
+                }
+
+            settingsLibraryStatus.text =
+                when (songs.size) {
+                    0 -> "No local tracks found"
+                    1 -> "1 local track"
+                    else -> "${songs.size} local tracks"
+                }
+
+            settingsVersion.text = "Version 1.0"
+        }
+
         val txtLibraryTitle = findViewById<TextView>(R.id.txtLibraryTitle)
         val txtLibrarySubtitle = findViewById<TextView>(R.id.txtLibrarySubtitle)
 
@@ -184,13 +240,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         settingsPlayback.setOnClickListener {
-            showScreen(playerScreen)
-            updateNavigation(navPlayer)
+            refreshSettingsUi()
+        }
 
-            if (MusicService.currentPath != null) {
-                syncPlayerUiFromService()
-                updateSeekBar()
-            }
+        settingsShuffle.setOnClickListener {
+            MusicService.toggleShuffle()
+            updateModeButtons()
+            refreshSettingsUi()
+        }
+
+        settingsRepeat.setOnClickListener {
+            MusicService.toggleRepeat()
+            updateModeButtons()
+            refreshSettingsUi()
         }
 
         settingsLocalMusic.setOnClickListener {
@@ -201,26 +263,45 @@ class MainActivity : AppCompatActivity() {
             updateNavigation(navLibrary)
         }
 
+        settingsRescan.setOnClickListener {
+            loadSongs()
+            refreshSettingsUi()
+
+            android.widget.Toast.makeText(
+                this,
+                "Music library refreshed",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+        }
+
         settingsVisualAtmosphere.setOnClickListener {
+            atmosphereEnabled = !atmosphereEnabled
+
+            vibeSettings.edit()
+                .putBoolean("album_atmosphere", atmosphereEnabled)
+                .apply()
+
+            refreshSettingsUi()
+
             imgAlbumArt.animate()
-                .alpha(0.65f)
-                .setDuration(180)
-                .withEndAction {
-                    imgAlbumArt.animate()
-                        .alpha(1.0f)
-                        .setDuration(220)
-                        .start()
-                }
+                .alpha(if (atmosphereEnabled) 1.0f else 0.78f)
+                .setDuration(180L)
                 .start()
+        }
+
+        settingsAtmosphereToggle.setOnClickListener {
+            settingsVisualAtmosphere.performClick()
         }
 
         settingsAbout.setOnClickListener {
             android.widget.Toast.makeText(
                 this,
-                "Vibeify • Local music, your way.",
+                "Vibeify 1.0 • Local music, your way.",
                 android.widget.Toast.LENGTH_LONG
             ).show()
         }
+
+        refreshSettingsUi()
 
         showScreen(homeScreen)
         updateNavigation(navHome)
